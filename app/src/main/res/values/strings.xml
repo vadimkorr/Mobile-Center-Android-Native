@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">MobileCenterAndroidDemo</string>
     <string name="facebook_app_id">1945815635652325</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

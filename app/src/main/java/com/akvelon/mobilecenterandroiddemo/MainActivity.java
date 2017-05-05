@@ -1,10 +1,17 @@
 package com.akvelon.mobilecenterandroiddemo;
 
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 
@@ -23,11 +30,9 @@ import com.google.android.gms.fitness.data.DataSet;
 import com.google.android.gms.fitness.data.DataSource;
 import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.fitness.data.Field;
-import com.google.android.gms.fitness.data.Subscription;
 import com.google.android.gms.fitness.request.DataReadRequest;
 import com.google.android.gms.fitness.result.DailyTotalResult;
 import com.google.android.gms.fitness.result.DataReadResult;
-import com.google.android.gms.fitness.result.ListSubscriptionsResult;
 import com.microsoft.azure.mobile.MobileCenter;
 import com.microsoft.azure.mobile.analytics.Analytics;
 import com.microsoft.azure.mobile.crashes.Crashes;
@@ -40,29 +45,24 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static com.google.android.gms.fitness.FitnessActivities.STILL;
-import static com.google.android.gms.fitness.FitnessActivities.WALKING;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "StepCounter";
     private GoogleApiClient mClient = null;
+    private TextView mTextMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MobileCenter.start(getApplication(), "6a9dd562-124f-4632-84ee-dfd3361d2e67",
-                Analytics.class, Crashes.class);
+        mTextMessage = (TextView) findViewById(R.id.message);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        Log.d("T", "Create");
-
-        // When permissions are revoked the app is restarted so onCreate is sufficient to check for
-        // permissions core to the Activity's functionality.
-//        if (!checkPermissions()) {
-//            requestPermissions();
-//        }
-
+        // This ensures that if the user denies the permissions then uses Settings to re-enable
+        // them, the app will start working.
         buildFitnessClient();
     }
 
@@ -70,9 +70,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        // This ensures that if the user denies the permissions then uses Settings to re-enable
-        // them, the app will start working.
-//        buildFitnessClient();
     }
 
     /**
@@ -345,13 +342,7 @@ public class MainActivity extends AppCompatActivity {
                 s += "Total 5 days activity: " + steps + "\n";
             }
 
-            final TextView textView = (TextView)findViewById(R.id.textView);
-            final String finalS = s;
-            textView.post(new Runnable() {
-                public void run() {
-                    textView.setText(finalS);
-                }
-            });
+            Log.d(TAG, s);
 
             return null;
         }
@@ -361,16 +352,29 @@ public class MainActivity extends AppCompatActivity {
         new VerifyDataTask().execute();
     }
 
-    public void onClick(View view) {
-        Map<String, String> properties = new HashMap<String, String>() {{
-            put("Social Network", "Twitter");
-        }};
-        Analytics.trackEvent("Login Button Tap", properties);
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
-        readData();
-    }
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    mTextMessage.setText(R.string.title_home);
+                    return true;
+                case R.id.navigation_dashboard:
+                    mTextMessage.setText(R.string.title_dashboard);
+                    return true;
+                case R.id.navigation_notifications:
+                    mTextMessage.setText(R.string.title_notifications);
+                    return true;
+            }
+            return false;
+        }
+
+    };
 
     public void onCrashClick(View view) {
+        Analytics.trackEvent("Crash button clicked");
         Crashes.generateTestCrash();
     }
 }
