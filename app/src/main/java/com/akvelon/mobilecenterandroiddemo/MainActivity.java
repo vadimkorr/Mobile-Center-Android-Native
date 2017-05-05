@@ -28,6 +28,9 @@ import com.google.android.gms.fitness.request.DataReadRequest;
 import com.google.android.gms.fitness.result.DailyTotalResult;
 import com.google.android.gms.fitness.result.DataReadResult;
 import com.google.android.gms.fitness.result.ListSubscriptionsResult;
+import com.microsoft.azure.mobile.MobileCenter;
+import com.microsoft.azure.mobile.analytics.Analytics;
+import com.microsoft.azure.mobile.crashes.Crashes;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -49,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        MobileCenter.start(getApplication(), "6a9dd562-124f-4632-84ee-dfd3361d2e67",
+                Analytics.class, Crashes.class);
 
         Log.d("T", "Create");
 
@@ -360,7 +365,12 @@ public class MainActivity extends AppCompatActivity {
         Map<String, String> properties = new HashMap<String, String>() {{
             put("Social Network", "Twitter");
         }};
+        Analytics.trackEvent("Login Button Tap", properties);
 
         readData();
+    }
+
+    public void onCrashClick(View view) {
+        Crashes.generateTestCrash();
     }
 }

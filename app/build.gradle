@@ -33,4 +33,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
     compile 'com.google.android.gms:play-services-fitness:9.8.0'
+
+    def mobileCenterSdkVersion = '0.7.0'
+    compile "com.microsoft.azure.mobile:mobile-center-analytics:${mobileCenterSdkVersion}"
+    compile "com.microsoft.azure.mobile:mobile-center-crashes:${mobileCenterSdkVersion}"
 }
