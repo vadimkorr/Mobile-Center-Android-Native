@@ -31,7 +31,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="?android:attr/windowBackground"
-        app:menu="@menu/navigation" />
+        app:menu="@menu/navigation"
+        android:background="@drawable/bnv_background"
+        app:itemIconTint="@color/bnv_tab_item_color"
+        app:itemTextColor="@color/bnv_tab_item_color"
+        />
 
 </LinearLayout>
