@@ -1,8 +1,13 @@
 package com.akvelon.mobilecenterandroiddemo;
 
+
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,24 +51,28 @@ import java.util.concurrent.TimeUnit;
 
 import static com.google.android.gms.fitness.FitnessActivities.STILL;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener {
 
     public static final String TAG = "StepCounter";
     private GoogleApiClient mClient = null;
-    private TextView mTextMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.main_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+//        Fragment fragment = new HomeFragment();
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        fragmentTransaction.replace(R.id.main_fragment, fragment);
+//        fragmentTransaction.commit();
 
         // This ensures that if the user denies the permissions then uses Settings to re-enable
         // them, the app will start working.
-        buildFitnessClient();
+//        buildFitnessClient();
     }
 
     @Override
@@ -161,6 +170,8 @@ public class MainActivity extends AppCompatActivity {
 //                    }
 //                });
     }
+
+
 
     /**
      * Read the current daily step total, computed from midnight of the current day
@@ -357,15 +368,23 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+            Fragment fragment = null;
             switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
-                    return true;
                 case R.id.navigation_stats:
-                    mTextMessage.setText(R.string.title_stats);
-                    return true;
+                    fragment = new HomeFragment();
+                    break;
+                default:
+                    fragment = new HomeFragment();
+                    break;
             }
-            return false;
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.main_fragment, fragment);
+            fragmentTransaction.commit();
+
+            return true;
         }
 
     };
@@ -373,5 +392,10 @@ public class MainActivity extends AppCompatActivity {
     public void onCrashClick(View view) {
         Analytics.trackEvent("Crash button clicked");
         Crashes.generateTestCrash();
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }
