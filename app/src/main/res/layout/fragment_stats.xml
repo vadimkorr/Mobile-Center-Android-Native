@@ -1,0 +1,120 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.akvelon.mobilecenterandroiddemo.StatsFragment">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="5 DAYS STATISTICS"
+        android:textAllCaps="true"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:id="@+id/textView" />
+
+    <FrameLayout
+        android:id="@+id/statistics_container"
+        android:layout_width="0dp"
+        android:layout_height="240dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/statistics_container"
+        android:layout_marginTop="20dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:id="@+id/statistics_buttons">
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:checkedButton="@+id/stats_radio_steps"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
+
+            <RadioButton
+                android:id="@+id/stats_radio_steps"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/radio_button_stats_selector"
+                android:button="@null"
+                android:drawableTop="@drawable/stats_steps"
+                android:gravity="bottom"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:text="Steps"
+                android:textAlignment="center" />
+
+            <RadioButton
+                android:id="@+id/stats_radio_calories"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/radio_button_stats_selector"
+                android:button="@null"
+                android:drawableTop="@drawable/stats_calories"
+                android:gravity="bottom"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:text="Calories"
+                android:textAlignment="center" />
+
+            <RadioButton
+                android:id="@+id/stats_radio_distance"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/radio_button_stats_selector"
+                android:button="@null"
+                android:drawableTop="@drawable/stats_distance"
+                android:gravity="bottom"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:text="Distance"
+                android:textAlignment="center" />
+
+            <RadioButton
+                android:id="@+id/stats_radio_active_time"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/radio_button_stats_selector"
+                android:button="@null"
+                android:drawableTop="@drawable/stats_active_time"
+                android:gravity="bottom"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:text="Active time"
+                android:textAlignment="center" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/stats_crash_button"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+
+        android:background="@drawable/button_crash"
+        android:text="CRASH APPLICATION"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="50dp"
+        app:layout_constraintTop_toBottomOf="@+id/statistics_buttons" />
+
+</android.support.constraint.ConstraintLayout>

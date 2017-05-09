@@ -51,7 +51,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.google.android.gms.fitness.FitnessActivities.STILL;
 
-public class MainActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener, StatsFragment.OnFragmentInteractionListener {
 
     public static final String TAG = "StepCounter";
     private GoogleApiClient mClient = null;
@@ -64,11 +64,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.main_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-//        Fragment fragment = new HomeFragment();
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        fragmentTransaction.replace(R.id.main_fragment, fragment);
-//        fragmentTransaction.commit();
+        showHomeFragment();
 
         // This ensures that if the user denies the permissions then uses Settings to re-enable
         // them, the app will start working.
@@ -368,30 +364,30 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-            Fragment fragment = null;
             switch (item.getItemId()) {
                 case R.id.navigation_stats:
-                    fragment = new HomeFragment();
-                    break;
+                    showStatsFragment();
+                    return true;
                 default:
-                    fragment = new HomeFragment();
-                    break;
+                    showHomeFragment();
+                    return true;
             }
-
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.main_fragment, fragment);
-            fragmentTransaction.commit();
-
-            return true;
         }
-
     };
 
-    public void onCrashClick(View view) {
-        Analytics.trackEvent("Crash button clicked");
-        Crashes.generateTestCrash();
+    private void showHomeFragment() {
+        showFragment(new HomeFragment());
+    }
+
+    private void showStatsFragment() {
+        showFragment(new StatsFragment());
+    }
+
+    private void showFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.main_fragment, fragment);
+        fragmentTransaction.commit();
     }
 
     @Override
