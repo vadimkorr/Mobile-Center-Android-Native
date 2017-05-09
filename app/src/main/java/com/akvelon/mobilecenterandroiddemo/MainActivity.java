@@ -51,7 +51,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.google.android.gms.fitness.FitnessActivities.STILL;
 
-public class MainActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener, StatsFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener {
 
     public static final String TAG = "StepCounter";
     private GoogleApiClient mClient = null;
@@ -380,7 +380,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
     }
 
     private void showStatsFragment() {
-        showFragment(new StatsFragment());
+        showFragment(StatsFragment.newInstance());
     }
 
     private void showFragment(Fragment fragment) {

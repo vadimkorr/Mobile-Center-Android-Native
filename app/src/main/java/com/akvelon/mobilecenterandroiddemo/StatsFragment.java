@@ -1,39 +1,38 @@
 package com.akvelon.mobilecenterandroiddemo;
 
-import android.content.Context;
-import android.net.Uri;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RadioGroup;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.microsoft.azure.mobile.analytics.Analytics;
 import com.microsoft.azure.mobile.crashes.Crashes;
+
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link StatsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
  * Use the {@link StatsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class StatsFragment extends Fragment implements View.OnClickListener {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class StatsFragment extends Fragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
-
-    private Button mCrashButton;
+    private LineChart mChart;
+    private RadioGroup mRadioGroup;
 
     public StatsFragment() {
         // Required empty public constructor
@@ -43,27 +42,11 @@ public class StatsFragment extends Fragment implements View.OnClickListener {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment StatsFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static StatsFragment newInstance(String param1, String param2) {
+    public static StatsFragment newInstance() {
         StatsFragment fragment = new StatsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -72,34 +55,83 @@ public class StatsFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_stats, container, false);
 
-        mCrashButton = (Button)view.findViewById(R.id.stats_crash_button);
-        mCrashButton.setOnClickListener(this);
+        mRadioGroup = (RadioGroup) view.findViewById(R.id.statistics_radio_buttons);
+        mRadioGroup.setOnCheckedChangeListener(this);
+
+        Button crashButton = (Button) view.findViewById(R.id.stats_crash_button);
+        crashButton.setOnClickListener(this);
+
+        mChart = (LineChart) view.findViewById(R.id.statistics_chart);
+        initChart();
 
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    private void initChart() {
+        // disable touch gestures
+        mChart.setTouchEnabled(false);
+        mChart.setDragEnabled(false);
+        mChart.setScaleXEnabled(false);
+        mChart.setScaleYEnabled(false);
+        mChart.getDescription().setEnabled(false);
+        mChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+
+        mChart.getAxisLeft().setDrawGridLines(false);
+        mChart.getAxisLeft().setLabelCount(5, false);
+
+        mChart.getAxisRight().setEnabled(false);
+
+        mChart.setDrawBorders(false);
+        mChart.getLegend().setEnabled(false);
+
+        setData(50, 100);
+        mChart.invalidate();
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+    private void setData(int count, float range) {
+
+        // now in hours
+        long now = TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis());
+
+        ArrayList<Entry> values = new ArrayList<Entry>();
+
+        float from = now;
+
+        // count = hours
+        float to = now + count;
+
+        // increment by 1 hour
+        for (float x = from; x < to; x++) {
+
+            float y = getRandom(range, 50);
+            values.add(new Entry(x, y)); // add one entry per hour
         }
+
+        // create a dataset and give it a type
+        LineDataSet set1 = new LineDataSet(values, "DataSet 1");
+        set1.setAxisDependency(YAxis.AxisDependency.LEFT);
+        set1.setColor(ColorTemplate.getHoloBlue());
+        set1.setValueTextColor(ColorTemplate.getHoloBlue());
+        set1.setLineWidth(1.5f);
+        set1.setDrawCircles(false);
+        set1.setDrawValues(false);
+        set1.setDrawFilled(true);
+        set1.setFillAlpha(65);
+        set1.setFillColor(ColorTemplate.getHoloBlue());
+        set1.setHighLightColor(Color.rgb(244, 117, 117));
+        set1.setDrawCircleHole(false);
+
+        // create a data object with the datasets
+        LineData data = new LineData(set1);
+        data.setValueTextColor(Color.WHITE);
+        data.setValueTextSize(9f);
+
+        // set data
+        mChart.setData(data);
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    protected float getRandom(float range, float startsfrom) {
+        return (float) (Math.random() * range) + startsfrom;
     }
 
     @Override
@@ -112,18 +144,41 @@ public class StatsFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    @Override
+    public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+        switch (checkedId) {
+            case R.id.stats_radio_steps:
+                showStepsData();
+                break;
+            case R.id.stats_radio_calories:
+                showCaloriesData();
+                break;
+            case R.id.stats_radio_distance:
+                showDistanceData();
+                break;
+            case R.id.stats_radio_active_time:
+                showActiveTimeData();
+                break;
+        }
+    }
+
+    private void showStepsData() {
+        setData(45, 100);
+        mChart.invalidate();
+    }
+
+    private void showCaloriesData() {
+        setData(45, 100);
+        mChart.invalidate();
+    }
+
+    private void showDistanceData() {
+        setData(45, 100);
+        mChart.invalidate();
+    }
+
+    private void showActiveTimeData() {
+        setData(45, 100);
+        mChart.invalidate();
     }
 }
