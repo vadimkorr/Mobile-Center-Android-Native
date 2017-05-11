@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.akvelon.mobilecenterandroiddemo.services.FitnessService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -51,7 +52,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.google.android.gms.fitness.FitnessActivities.STILL;
 
-public class MainActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "StepCounter";
     private GoogleApiClient mClient = null;
@@ -60,6 +61,19 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        FitnessService fitnessService = ((MyApplication)getApplication()).getFitnessService();
+        fitnessService.initFitnessClient(this, new FitnessService.FitnessServiceInitCallback() {
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onFail(ConnectionResult result) {
+
+            }
+        });
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.main_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -390,8 +404,4 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         fragmentTransaction.commit();
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
 }

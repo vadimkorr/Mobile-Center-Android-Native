@@ -10,4 +10,5 @@
     <string name="home_calories">CALORIES</string>
     <string name="home_distance">DISTANCE</string>
     <string name="active_time">ACTIVE TIME</string>
+    <string name="progress_dialog_loading">Loading...</string>
 </resources>

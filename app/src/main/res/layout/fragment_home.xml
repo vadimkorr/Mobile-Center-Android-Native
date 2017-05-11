@@ -20,39 +20,39 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/home_mobile_center"
                 android:layout_width="154dp"
                 android:layout_height="33dp"
+                android:layout_marginTop="30dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:srcCompat="@drawable/login_mobile_center"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="30dp" />
+                app:srcCompat="@drawable/login_mobile_center" />
 
             <ImageView
                 android:id="@+id/home_user_image"
                 android:layout_width="104dp"
                 android:layout_height="93dp"
-                app:srcCompat="@drawable/home_background"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
                 android:layout_marginTop="30dp"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/home_mobile_center"
-                app:layout_constraintHorizontal_bias="0.5" />
+                app:srcCompat="@drawable/home_background" />
 
             <TextView
                 android:id="@+id/home_greeting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="HI, RICK WALLACE"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
                 android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/home_user_image"
-                app:layout_constraintHorizontal_bias="0.5" />
+                android:text="HI, RICK WALLACE"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/home_user_image" />
 
             <TextView
                 android:id="@+id/home_steps_title"
@@ -69,13 +69,13 @@
                 android:id="@+id/home_steps_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="17dp"
                 android:text="10000"
                 android:textColor="#01abee"
                 android:textSize="80sp"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                android:layout_marginTop="17dp"
                 app:layout_constraintTop_toBottomOf="@+id/home_steps_title" />
 
             <LinearLayout
@@ -154,17 +154,29 @@
                         android:textAllCaps="true"
                         android:textSize="11sp" />
 
-                    <TextView
-                        android:id="@+id/home_distance_value"
-                        android:layout_width="match_parent"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:gravity="top"
-                        android:text="7.4"
-                        android:textAlignment="center"
-                        android:textAllCaps="true"
-                        android:textColor="#8b05e4"
-                        android:textSize="26sp" />
+                        android:layout_gravity="bottom|center_horizontal"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/home_distance_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="7.4"
+                            android:textAllCaps="true"
+                            android:textColor="#8b05e4"
+                            android:textSize="26sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="3dp"
+                            android:text="Km"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
                 </FrameLayout>
 
                 <FrameLayout
@@ -194,17 +206,44 @@
                         android:textAllCaps="true"
                         android:textSize="11sp" />
 
-                    <TextView
-                        android:id="@+id/home_active_time_value"
-                        android:layout_width="match_parent"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:gravity="top"
-                        android:text="7.4"
-                        android:textAlignment="center"
-                        android:textAllCaps="true"
-                        android:textColor="#49ae20"
-                        android:textSize="26sp" />
+                        android:layout_gravity="bottom|center_horizontal"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/home_active_time_hour_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textAllCaps="true"
+                            android:textColor="#49ae20"
+                            android:textSize="26sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="h"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/home_active_time_minute_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="3dp"
+                            android:text="0"
+                            android:textAllCaps="true"
+                            android:textColor="#49ae20"
+                            android:textSize="26sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="m"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
                 </FrameLayout>
             </LinearLayout>
 
