@@ -39,12 +39,12 @@
             android:text="LOGIN VIA FACEBOOK"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/button2"
+            app:layout_constraintBottom_toTopOf="@+id/login_twitter_button"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/login_twitter_button"
             android:layout_width="250dp"
             android:layout_height="50dp"
             android:layout_marginBottom="62dp"
