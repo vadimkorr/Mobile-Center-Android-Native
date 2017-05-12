@@ -58,7 +58,17 @@ public class HomeFragment extends Fragment {
         mActiveTimeHourTextView = (TextView)view.findViewById(R.id.home_active_time_hour_value);
         mActiveTimeMinuteTextView = (TextView)view.findViewById(R.id.home_active_time_minute_value);
 
+        resetFitnessValues();
+
         return view;
+    }
+
+    private void resetFitnessValues() {
+        mStepsTextView.setText("0");
+        mCaloriesTextView.setText("0");
+        mDistanceTextView.setText("0");
+        mActiveTimeHourTextView.setText("0");
+        mActiveTimeMinuteTextView.setText("0");
     }
 
     @Override
