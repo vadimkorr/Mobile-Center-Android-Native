@@ -43,6 +43,7 @@ public class StatsFragment extends Fragment implements View.OnClickListener, Rad
     private Context mContext;
     private MyFitnessTask mFitnessTask;
     private List<FitnessData> mFitnessDataList;
+    private Date mFitnessLastUpdatedDate;
     private FitnessDataType mSelectedFitnessType = FitnessDataType.STEPS;
 
     private enum FitnessDataType {
@@ -81,6 +82,7 @@ public class StatsFragment extends Fragment implements View.OnClickListener, Rad
 
         mChart = (LineChart) view.findViewById(R.id.statistics_chart);
         initChart();
+        updateChartValues();
 
         return view;
     }
@@ -101,7 +103,11 @@ public class StatsFragment extends Fragment implements View.OnClickListener, Rad
     public void onStart() {
         super.onStart();
 
-        if (mFitnessTask == null || mFitnessTask.getStatus() == AsyncTask.Status.FINISHED) {
+        final int MS_IN_MINUTE = 60 * 1000;
+        long outdatedTimeout = 1 * MS_IN_MINUTE;
+        boolean dataOutdated = mFitnessLastUpdatedDate == null || mFitnessLastUpdatedDate.getTime() < new Date().getTime() - outdatedTimeout;
+        boolean asyncTaskNotRunning = mFitnessTask == null || mFitnessTask.getStatus() == AsyncTask.Status.FINISHED;
+        if (dataOutdated && asyncTaskNotRunning) {
             mFitnessTask = new MyFitnessTask(mContext);
             mFitnessTask.execute();
         }
@@ -151,10 +157,10 @@ public class StatsFragment extends Fragment implements View.OnClickListener, Rad
                 mSelectedFitnessType = FitnessDataType.ACTIVE_TIME;
                 break;
         }
-        updateChart();
+        updateChartValues();
     }
 
-    private void updateChart() {
+    private void updateChartValues() {
         if (mFitnessDataList == null || mFitnessDataList.size() == 0) {
             return;
         }
@@ -243,7 +249,10 @@ public class StatsFragment extends Fragment implements View.OnClickListener, Rad
         protected void updateUI(List<FitnessData> dataList) {
             if (dataList.size() > 0) {
                 mFitnessDataList = dataList;
-                updateChart();
+                updateChartValues();
+
+                // update last update date to ensure outdating
+                mFitnessLastUpdatedDate = new Date();
             }
         }
 

@@ -25,6 +25,8 @@ import java.util.List;
 public class HomeFragment extends Fragment {
     private Context mContext;
     private MyFitnessTask mFitnessTask;
+    private FitnessData mFitnessData;
+    private Date mFitnessLastUpdatedDate;
     private TextView mCaloriesTextView;
     private TextView mStepsTextView;
     private TextView mDistanceTextView;
@@ -40,7 +42,6 @@ public class HomeFragment extends Fragment {
      *
      * @return A new instance of fragment HomeFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         return fragment;
@@ -58,17 +59,9 @@ public class HomeFragment extends Fragment {
         mActiveTimeHourTextView = (TextView)view.findViewById(R.id.home_active_time_hour_value);
         mActiveTimeMinuteTextView = (TextView)view.findViewById(R.id.home_active_time_minute_value);
 
-        resetFitnessValues();
+        updateFitnessValues();
 
         return view;
-    }
-
-    private void resetFitnessValues() {
-        mStepsTextView.setText("0");
-        mCaloriesTextView.setText("0");
-        mDistanceTextView.setText("0");
-        mActiveTimeHourTextView.setText("0");
-        mActiveTimeMinuteTextView.setText("0");
     }
 
     @Override
@@ -87,10 +80,49 @@ public class HomeFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        if (mFitnessTask == null || mFitnessTask.getStatus() == AsyncTask.Status.FINISHED) {
+        final int MS_IN_MINUTE = 60 * 1000;
+        long outdatedTimeout = 1 * MS_IN_MINUTE;
+        boolean dataOutdated = mFitnessLastUpdatedDate == null || mFitnessLastUpdatedDate.getTime() < new Date().getTime() - outdatedTimeout;
+        boolean asyncTaskNotRunning = mFitnessTask == null || mFitnessTask.getStatus() == AsyncTask.Status.FINISHED;
+        if (dataOutdated && asyncTaskNotRunning) {
             mFitnessTask = new MyFitnessTask(mContext);
             mFitnessTask.execute();
         }
+    }
+
+    private void resetFitnessValues() {
+        mStepsTextView.setText("0");
+        mCaloriesTextView.setText("0");
+        mDistanceTextView.setText("0");
+        mActiveTimeHourTextView.setText("0");
+        mActiveTimeMinuteTextView.setText("0");
+    }
+
+    private void updateFitnessValues() {
+        if (mFitnessData == null) {
+            resetFitnessValues();
+            return;
+        }
+
+        // steps
+        mStepsTextView.setText(String.valueOf(mFitnessData.getSteps()));
+
+        // calories
+        mCaloriesTextView.setText(String.valueOf((int)mFitnessData.getCalories()));
+
+        // distance
+        DecimalFormat df = new DecimalFormat("0.00");
+        final int METERS_IN_KILOMETER = 1000;
+        double km = mFitnessData.getDistance() / METERS_IN_KILOMETER;
+        mDistanceTextView.setText(df.format(km));
+
+        // active time
+        final int MS_IN_MINUTE = 1000 * 60;
+        final int MS_IN_HOUR = MS_IN_MINUTE * 60;
+        int hours = mFitnessData.getActiveTime() / MS_IN_HOUR;
+        int minutes = (mFitnessData.getActiveTime() - hours * MS_IN_HOUR) / MS_IN_MINUTE;
+        mActiveTimeHourTextView.setText(String.valueOf(hours));
+        mActiveTimeMinuteTextView.setText(String.valueOf(minutes));
     }
 
     class MyFitnessTask extends FitnessAsyncTask {
@@ -102,23 +134,11 @@ public class HomeFragment extends Fragment {
         @Override
         protected void updateUI(List<FitnessData> dataList) {
             if (dataList.size() > 0) {
-                FitnessData fitnessData = dataList.get(0);
+                mFitnessData = dataList.get(0);
+                updateFitnessValues();
 
-                mStepsTextView.setText(String.valueOf(fitnessData.getSteps()));
-
-                mCaloriesTextView.setText(String.valueOf((int)fitnessData.getCalories()));
-
-                DecimalFormat df = new DecimalFormat("0.00");
-                final int METERS_IN_KILOMETER = 1000;
-                double km = fitnessData.getDistance() / METERS_IN_KILOMETER;
-                mDistanceTextView.setText(df.format(km));
-
-                final int MS_IN_MINUTE = 1000 * 60;
-                final int MS_IN_HOUR = MS_IN_MINUTE * 60;
-                int hours = fitnessData.getActiveTime() / MS_IN_HOUR;
-                int minutes = (fitnessData.getActiveTime() - hours * MS_IN_HOUR) / MS_IN_MINUTE;
-                mActiveTimeHourTextView.setText(String.valueOf(hours));
-                mActiveTimeMinuteTextView.setText(String.valueOf(minutes));
+                // update last update date to ensure outdating
+                mFitnessLastUpdatedDate = new Date();
             }
         }
 
