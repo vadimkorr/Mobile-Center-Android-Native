@@ -1,6 +1,8 @@
 package com.akvelon.mobilecenterandroiddemo;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
@@ -10,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioGroup;
 
+import com.akvelon.mobilecenterandroiddemo.helpers.DateHelper;
+import com.akvelon.mobilecenterandroiddemo.services.FitnessData;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -21,7 +25,8 @@ import com.microsoft.azure.mobile.analytics.Analytics;
 import com.microsoft.azure.mobile.crashes.Crashes;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -31,8 +36,21 @@ import java.util.concurrent.TimeUnit;
  */
 public class StatsFragment extends Fragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
+    public static final String TAG = "StepCounter";
+
     private LineChart mChart;
     private RadioGroup mRadioGroup;
+    private Context mContext;
+    private MyFitnessTask mFitnessTask;
+    private List<FitnessData> mFitnessDataList;
+    private FitnessDataType mSelectedFitnessType = FitnessDataType.STEPS;
+
+    private enum FitnessDataType {
+        STEPS,
+        CALORIES,
+        DISTANCE,
+        ACTIVE_TIME
+    }
 
     public StatsFragment() {
         // Required empty public constructor
@@ -67,6 +85,28 @@ public class StatsFragment extends Fragment implements View.OnClickListener, Rad
         return view;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mContext = null;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if (mFitnessTask == null || mFitnessTask.getStatus() == AsyncTask.Status.FINISHED) {
+            mFitnessTask = new MyFitnessTask(mContext);
+            mFitnessTask.execute();
+        }
+    }
+
     private void initChart() {
         // disable touch gestures
         mChart.setTouchEnabled(false);
@@ -83,55 +123,6 @@ public class StatsFragment extends Fragment implements View.OnClickListener, Rad
 
         mChart.setDrawBorders(false);
         mChart.getLegend().setEnabled(false);
-
-        setData(50, 100);
-        mChart.invalidate();
-    }
-
-    private void setData(int count, float range) {
-
-        // now in hours
-        long now = TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis());
-
-        ArrayList<Entry> values = new ArrayList<Entry>();
-
-        float from = now;
-
-        // count = hours
-        float to = now + count;
-
-        // increment by 1 hour
-        for (float x = from; x < to; x++) {
-
-            float y = getRandom(range, 50);
-            values.add(new Entry(x, y)); // add one entry per hour
-        }
-
-        // create a dataset and give it a type
-        LineDataSet set1 = new LineDataSet(values, "DataSet 1");
-        set1.setAxisDependency(YAxis.AxisDependency.LEFT);
-        set1.setColor(ColorTemplate.getHoloBlue());
-        set1.setValueTextColor(ColorTemplate.getHoloBlue());
-        set1.setLineWidth(1.5f);
-        set1.setDrawCircles(false);
-        set1.setDrawValues(false);
-        set1.setDrawFilled(true);
-        set1.setFillAlpha(65);
-        set1.setFillColor(ColorTemplate.getHoloBlue());
-        set1.setHighLightColor(Color.rgb(244, 117, 117));
-        set1.setDrawCircleHole(false);
-
-        // create a data object with the datasets
-        LineData data = new LineData(set1);
-        data.setValueTextColor(Color.WHITE);
-        data.setValueTextSize(9f);
-
-        // set data
-        mChart.setData(data);
-    }
-
-    protected float getRandom(float range, float startsfrom) {
-        return (float) (Math.random() * range) + startsfrom;
     }
 
     @Override
@@ -148,37 +139,123 @@ public class StatsFragment extends Fragment implements View.OnClickListener, Rad
     public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
         switch (checkedId) {
             case R.id.stats_radio_steps:
-                showStepsData();
+                mSelectedFitnessType = FitnessDataType.STEPS;
                 break;
             case R.id.stats_radio_calories:
-                showCaloriesData();
+                mSelectedFitnessType = FitnessDataType.CALORIES;
                 break;
             case R.id.stats_radio_distance:
-                showDistanceData();
+                mSelectedFitnessType = FitnessDataType.DISTANCE;
                 break;
             case R.id.stats_radio_active_time:
-                showActiveTimeData();
+                mSelectedFitnessType = FitnessDataType.ACTIVE_TIME;
                 break;
+        }
+        updateChart();
+    }
+
+    private void updateChart() {
+        if (mFitnessDataList == null || mFitnessDataList.size() == 0) {
+            return;
+        }
+
+        // first timestamp in our data set
+        long referenceTimestamp = mFitnessDataList.get(0).getDate().getTime();
+        List<Entry> values = getEntryValues(mFitnessDataList, mSelectedFitnessType, referenceTimestamp);
+
+        // create a data with values
+        LineDataSet dataSet = lineDataSet(values);
+        // create a data object with the data set
+        LineData data = lineData(dataSet);
+
+        configureXAxisFormatter(referenceTimestamp);
+
+        // set data
+        mChart.setData(data);
+        mChart.invalidate();
+    }
+
+    private List<Entry> getEntryValues(List<FitnessData> fitnessDataList, FitnessDataType fitnessType, long referenceTimestamp) {
+        ArrayList<Entry> values = new ArrayList<Entry>();
+        for (FitnessData fitnessData : fitnessDataList) {
+            float x = fitnessData.getDate().getTime() - referenceTimestamp;
+            float y = (float)getAppropriateFitnessValue(fitnessData, fitnessType);
+            values.add(new Entry(x, y));
+        }
+        return values;
+    }
+
+    private void configureXAxisFormatter(long referenceTimestamp) {
+        ChartDateAxisValueFormatter xAxisFormatter = new ChartDateAxisValueFormatter(referenceTimestamp);
+        XAxis xAxis = mChart.getXAxis();
+        xAxis.setValueFormatter(xAxisFormatter);
+    }
+
+    private LineDataSet lineDataSet(List<Entry> values) {
+        // create a data set and give it a type
+        LineDataSet set = new LineDataSet(values, "DataSet");
+        set.setAxisDependency(YAxis.AxisDependency.LEFT);
+        set.setColor(ColorTemplate.getHoloBlue());
+        set.setValueTextColor(ColorTemplate.getHoloBlue());
+        set.setLineWidth(1.5f);
+        set.setDrawCircles(false);
+        set.setDrawValues(false);
+        set.setDrawFilled(true);
+        set.setFillAlpha(65);
+        set.setFillColor(ColorTemplate.getHoloBlue());
+        set.setHighLightColor(Color.rgb(244, 117, 117));
+        set.setDrawCircleHole(false);
+
+        return set;
+    }
+
+    private LineData lineData(LineDataSet dataSet) {
+        // create a data object with the datasets
+        LineData data = new LineData(dataSet);
+        data.setValueTextColor(Color.WHITE);
+        data.setValueTextSize(9f);
+
+        return data;
+    }
+
+    private double getAppropriateFitnessValue(FitnessData fitnessData, FitnessDataType neededType) {
+        switch (neededType) {
+            case STEPS:
+                return fitnessData.getSteps();
+            case CALORIES:
+                return fitnessData.getCalories();
+            case DISTANCE:
+                final int METERS_IN_KILOMETER = 1000;
+                return fitnessData.getDistance() / METERS_IN_KILOMETER;
+            default:
+                final int MS_IN_HOUR = 1000 * 60 * 60;
+                return (double)fitnessData.getActiveTime() / MS_IN_HOUR;
         }
     }
 
-    private void showStepsData() {
-        setData(45, 100);
-        mChart.invalidate();
-    }
+    class MyFitnessTask extends FitnessAsyncTask {
 
-    private void showCaloriesData() {
-        setData(45, 100);
-        mChart.invalidate();
-    }
+        public MyFitnessTask(Context context) {
+            super(context);
+        }
 
-    private void showDistanceData() {
-        setData(45, 100);
-        mChart.invalidate();
-    }
+        @Override
+        protected void updateUI(List<FitnessData> dataList) {
+            if (dataList.size() > 0) {
+                mFitnessDataList = dataList;
+                updateChart();
+            }
+        }
 
-    private void showActiveTimeData() {
-        setData(45, 100);
-        mChart.invalidate();
+        @Override
+        protected Date startDate() {
+            int daysAgo = 4;
+            return DateHelper.date(daysAgo);
+        }
+
+        @Override
+        protected Date endDate() {
+            return new Date();
+        }
     }
 }
