@@ -2,6 +2,7 @@ package com.akvelon.mobilecenterandroiddemo;
 
 import android.app.Application;
 
+import com.akvelon.mobilecenterandroiddemo.services.Analytics.AnalyticsService;
 import com.akvelon.mobilecenterandroiddemo.services.Fitness.FitnessService;
 import com.akvelon.mobilecenterandroiddemo.services.ServicesFactory;
 import com.akvelon.mobilecenterandroiddemo.services.Social.SocialService;
@@ -16,6 +17,7 @@ public class MyApplication extends Application {
     private FitnessService mFitnessService;
     private SocialService mFacebookService;
     private SocialService mTwitterService;
+    private AnalyticsService mAnalyticsService;
 
     public MyApplication() {
         mServicesFactory = new ServicesFactory(this);
@@ -40,5 +42,12 @@ public class MyApplication extends Application {
             mTwitterService = mServicesFactory.getTwitterService();
         }
         return mTwitterService;
+    }
+
+    public AnalyticsService getAnalyticsService() {
+        if (mAnalyticsService == null) {
+            mAnalyticsService = mServicesFactory.getAnalyticsService();
+        }
+        return mAnalyticsService;
     }
 }

@@ -2,6 +2,8 @@ package com.akvelon.mobilecenterandroiddemo.services;
 
 import android.content.Context;
 
+import com.akvelon.mobilecenterandroiddemo.services.Analytics.AnalyticsService;
+import com.akvelon.mobilecenterandroiddemo.services.Analytics.MCAnalyticsService;
 import com.akvelon.mobilecenterandroiddemo.services.Fitness.FitnessService;
 import com.akvelon.mobilecenterandroiddemo.services.Fitness.GoogleFitService;
 import com.akvelon.mobilecenterandroiddemo.services.Social.FacebookService;
@@ -31,5 +33,9 @@ public class ServicesFactory {
 
     public SocialService getTwitterService() {
         return new TwitterService(mContext);
+    }
+
+    public AnalyticsService getAnalyticsService() {
+        return new MCAnalyticsService(mContext);
     }
 }
