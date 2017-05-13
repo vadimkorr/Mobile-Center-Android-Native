@@ -7,6 +7,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.microsoft.azure.mobile.MobileCenter;
 import com.microsoft.azure.mobile.analytics.Analytics;
 import com.microsoft.azure.mobile.crashes.Crashes;
@@ -20,6 +27,10 @@ import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 import com.twitter.sdk.android.core.models.User;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TWITTER_KEY = "RpQDj4XFdHRvHp4l3uOKkyDJq";
     private static final String TWITTER_SECRET = "qqOILC0EPMvOFdsYXbE5zkgccU5Dsuo8P7PwcDR3cGoRLRm21c";
     private TwitterAuthClient mTwitterAuthClient;
-
+    private CallbackManager mFacebookCallbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +57,9 @@ public class LoginActivity extends AppCompatActivity {
 
         MobileCenter.start(getApplication(), "6a9dd562-124f-4632-84ee-dfd3361d2e67",
                 Analytics.class, Crashes.class);
+
+
+        mFacebookCallbackManager = CallbackManager.Factory.create();
     }
 
     public void onLoginFacebookClick(View view) {
@@ -55,7 +69,57 @@ public class LoginActivity extends AppCompatActivity {
         }};
         Analytics.trackEvent("Facebook login button clicked", properties);
 
-        showMainActivity(null);
+        LoginManager.getInstance().registerCallback(
+                mFacebookCallbackManager,
+                new FacebookCallback< LoginResult >() {
+                    @Override
+                    public void onSuccess(final LoginResult loginResult) {
+                        GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(),
+                                new GraphRequest.GraphJSONObjectCallback() {
+                                    @Override
+                                    public void onCompleted(JSONObject object, GraphResponse response) {
+                                        Log.v("LoginActivity", response.toString());
+
+                                        try {
+
+                                            String userID = (String) object.get("id");
+                                            String userName = (String) object.get("name");
+                                            String accessToken = loginResult.getAccessToken().getToken();
+                                            String imageUrl = "https://graph.facebook.com/" + userID+ "/picture?type=large";
+
+                                            com.akvelon.mobilecenterandroiddemo.models.User user;
+                                            user = new com.akvelon.mobilecenterandroiddemo.models.User(
+                                                    userName,
+                                                    accessToken,
+                                                    imageUrl,
+                                                    com.akvelon.mobilecenterandroiddemo.models.User.SocialNetwork.FACEBOOK
+                                            );
+
+                                            showMainActivity(user);
+
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                        );
+                        Bundle parameters = new Bundle();
+                        parameters.putString("fields", "id,name,picture");
+                        request.setParameters(parameters);
+                        request.executeAsync();
+                    }
+
+                    @Override
+                    public void onCancel() {
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                    }
+                }
+        );
+
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("user_photos", "public_profile"));
     }
 
     public void onLoginTwitterClick(View view) {
@@ -121,6 +185,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
         mTwitterAuthClient.onActivityResult(requestCode, responseCode, intent);
+        mFacebookCallbackManager.onActivityResult(requestCode, responseCode, intent);
     }
 
     private void showMainActivity(com.akvelon.mobilecenterandroiddemo.models.User user) {
