@@ -10,19 +10,25 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.akvelon.mobilecenterandroiddemo.models.User;
 import com.akvelon.mobilecenterandroiddemo.services.Fitness.FitnessService;
 import com.google.android.gms.common.ConnectionResult;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String ARG_USER = "user";
+
     private Fragment mHomeFragment;
     private Fragment mStatsFragment;
     private Fragment mCurrentFragment;
+    private User mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mUser = getIntent().getExtras().getParcelable(ARG_USER);
 
         FitnessService fitnessService = ((MyApplication)getApplication()).getFitnessService();
         fitnessService.initFitnessClient(this, new FitnessService.FitnessServiceInitCallback() {
@@ -82,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
     public Fragment getHomeFragment() {
         if (mHomeFragment == null) {
-            mHomeFragment = HomeFragment.newInstance();
+            mHomeFragment = HomeFragment.newInstance(mUser);
         }
         return mHomeFragment;
     }

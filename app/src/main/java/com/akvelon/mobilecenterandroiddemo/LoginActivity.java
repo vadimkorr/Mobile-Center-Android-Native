@@ -85,6 +85,7 @@ public class LoginActivity extends AppCompatActivity {
     private void showMainActivity(User user) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+        intent.putExtra(MainActivity.ARG_USER, user);
         startActivity(intent);
         this.finish();
     }

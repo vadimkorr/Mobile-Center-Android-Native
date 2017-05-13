@@ -1,16 +1,24 @@
 package com.akvelon.mobilecenterandroiddemo;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.akvelon.mobilecenterandroiddemo.helpers.DateHelper;
+import com.akvelon.mobilecenterandroiddemo.models.User;
 import com.akvelon.mobilecenterandroiddemo.services.Fitness.FitnessData;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 import java.util.Date;
@@ -23,6 +31,9 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class HomeFragment extends Fragment {
+    public static final String ARG_USER = "user";
+
+    private User mUser;
     private Context mContext;
     private MyFitnessTask mFitnessTask;
     private FitnessData mFitnessData;
@@ -32,6 +43,8 @@ public class HomeFragment extends Fragment {
     private TextView mDistanceTextView;
     private TextView mActiveTimeHourTextView;
     private TextView mActiveTimeMinuteTextView;
+    private TextView mGreetingTextView;
+    private ImageView mUserImage;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -42,9 +55,20 @@ public class HomeFragment extends Fragment {
      *
      * @return A new instance of fragment HomeFragment.
      */
-    public static HomeFragment newInstance() {
+    public static HomeFragment newInstance(User user) {
         HomeFragment fragment = new HomeFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(ARG_USER, user);
+        fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mUser = getArguments().getParcelable(ARG_USER);
+        }
     }
 
     @Override
@@ -53,12 +77,15 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        mGreetingTextView = (TextView)view.findViewById(R.id.home_greeting);
+        mUserImage = (ImageView)view.findViewById(R.id.home_user_image);
         mStepsTextView = (TextView)view.findViewById(R.id.home_steps_value);
         mCaloriesTextView = (TextView)view.findViewById(R.id.home_calories_value);
         mDistanceTextView = (TextView)view.findViewById(R.id.home_distance_value);
         mActiveTimeHourTextView = (TextView)view.findViewById(R.id.home_active_time_hour_value);
         mActiveTimeMinuteTextView = (TextView)view.findViewById(R.id.home_active_time_minute_value);
 
+        updateUserData();
         updateFitnessValues();
 
         return view;
@@ -88,6 +115,30 @@ public class HomeFragment extends Fragment {
             mFitnessTask = new MyFitnessTask(mContext);
             mFitnessTask.execute();
         }
+    }
+
+    private void updateUserData() {
+        String greeting = "HI, " + mUser.getFullName();
+        mGreetingTextView.setText(greeting);
+
+        // loading user image
+        Picasso.with(mContext)
+                .load(mUser.getImageUrlString())
+                .into(mUserImage, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        // creating round image
+                        Bitmap imageBitmap = ((BitmapDrawable) mUserImage.getDrawable()).getBitmap();
+                        RoundedBitmapDrawable imageDrawable = RoundedBitmapDrawableFactory.create(getResources(), imageBitmap);
+                        imageDrawable.setCircular(true);
+                        imageDrawable.setCornerRadius(Math.max(imageBitmap.getWidth(), imageBitmap.getHeight()) / 2.0f);
+                        mUserImage.setImageDrawable(imageDrawable);
+                    }
+                    @Override
+                    public void onError() {
+                        // do nothing
+                    }
+                });
     }
 
     private void resetFitnessValues() {
