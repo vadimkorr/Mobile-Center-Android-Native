@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.akvelon.mobilecenterandroiddemo.helpers.DateHelper;
-import com.akvelon.mobilecenterandroiddemo.services.FitnessData;
+import com.akvelon.mobilecenterandroiddemo.services.Fitness.FitnessData;
 
 import java.text.DecimalFormat;
 import java.util.Date;

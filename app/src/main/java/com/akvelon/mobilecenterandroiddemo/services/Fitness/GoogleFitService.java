@@ -1,4 +1,4 @@
-package com.akvelon.mobilecenterandroiddemo.services;
+package com.akvelon.mobilecenterandroiddemo.services.Fitness;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -21,10 +21,8 @@ import com.google.android.gms.fitness.request.DataReadRequest;
 import com.google.android.gms.fitness.result.DataReadResult;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import static com.google.android.gms.fitness.FitnessActivities.STILL;

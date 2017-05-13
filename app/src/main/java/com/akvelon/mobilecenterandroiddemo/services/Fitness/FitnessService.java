@@ -1,4 +1,4 @@
-package com.akvelon.mobilecenterandroiddemo.services;
+package com.akvelon.mobilecenterandroiddemo.services.Fitness;
 
 import android.support.v4.app.FragmentActivity;
 

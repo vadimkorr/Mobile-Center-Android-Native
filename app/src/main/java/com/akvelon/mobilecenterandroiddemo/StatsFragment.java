@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.RadioGroup;
 
 import com.akvelon.mobilecenterandroiddemo.helpers.DateHelper;
-import com.akvelon.mobilecenterandroiddemo.services.FitnessData;
+import com.akvelon.mobilecenterandroiddemo.services.Fitness.FitnessData;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;

@@ -1,4 +1,4 @@
-package com.akvelon.mobilecenterandroiddemo.services;
+package com.akvelon.mobilecenterandroiddemo.services.Fitness;
 
 import java.util.Date;
 

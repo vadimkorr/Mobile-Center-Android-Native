@@ -10,7 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import com.akvelon.mobilecenterandroiddemo.services.FitnessService;
+import com.akvelon.mobilecenterandroiddemo.services.Fitness.FitnessService;
 import com.google.android.gms.common.ConnectionResult;
 
 public class MainActivity extends AppCompatActivity {

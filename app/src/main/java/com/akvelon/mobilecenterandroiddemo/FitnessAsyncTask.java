@@ -4,11 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.akvelon.mobilecenterandroiddemo.helpers.DateHelper;
-import com.akvelon.mobilecenterandroiddemo.services.FitnessData;
-import com.akvelon.mobilecenterandroiddemo.services.FitnessService;
+import com.akvelon.mobilecenterandroiddemo.services.Fitness.FitnessData;
+import com.akvelon.mobilecenterandroiddemo.services.Fitness.FitnessService;
 
-import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 

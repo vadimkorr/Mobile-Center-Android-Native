@@ -1,10 +1,10 @@
 package com.akvelon.mobilecenterandroiddemo;
 
 import android.app.Application;
-import android.content.pm.ApplicationInfo;
 
-import com.akvelon.mobilecenterandroiddemo.services.FitnessService;
+import com.akvelon.mobilecenterandroiddemo.services.Fitness.FitnessService;
 import com.akvelon.mobilecenterandroiddemo.services.ServicesFactory;
+import com.akvelon.mobilecenterandroiddemo.services.Social.SocialService;
 
 /**
  * Created by ruslan on 5/11/17.
@@ -14,9 +14,11 @@ public class MyApplication extends Application {
 
     private ServicesFactory mServicesFactory;
     private FitnessService mFitnessService;
+    private SocialService mFacebookService;
+    private SocialService mTwitterService;
 
     public MyApplication() {
-        mServicesFactory = new ServicesFactory();
+        mServicesFactory = new ServicesFactory(this);
     }
 
     public FitnessService getFitnessService() {
@@ -24,5 +26,19 @@ public class MyApplication extends Application {
             mFitnessService = mServicesFactory.getFitnessService();
         }
         return mFitnessService;
+    }
+
+    public SocialService getFacebookService() {
+        if (mFacebookService == null) {
+            mFacebookService = mServicesFactory.getFacebookService();
+        }
+        return mFacebookService;
+    }
+
+    public SocialService getTwitterService() {
+        if (mTwitterService == null) {
+            mTwitterService = mServicesFactory.getTwitterService();
+        }
+        return mTwitterService;
     }
 }
