@@ -55,7 +55,8 @@ public class FacebookService implements SocialService, FacebookCallback<LoginRes
 
     @Override
     public void onCancel() {
-        mCallback.onCancel();
+        Error error = new Error("User has canceled log in process");
+        mCallback.onFailure(error);
     }
 
     @Override

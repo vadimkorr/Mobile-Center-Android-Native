@@ -14,7 +14,6 @@ public interface SocialService {
     interface LogInCallback {
         void onSuccess(User user);
         void onFailure(Error error);
-        void onCancel();
     }
 
     void logIn(Activity activity, LogInCallback callback);

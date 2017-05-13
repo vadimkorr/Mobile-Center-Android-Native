@@ -3,109 +3,75 @@ package com.akvelon.mobilecenterandroiddemo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.akvelon.mobilecenterandroiddemo.models.User;
 import com.akvelon.mobilecenterandroiddemo.services.Social.SocialService;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
-import com.microsoft.azure.mobile.MobileCenter;
-import com.microsoft.azure.mobile.analytics.Analytics;
-import com.microsoft.azure.mobile.crashes.Crashes;
-import com.twitter.sdk.android.Twitter;
-import com.twitter.sdk.android.core.Callback;
-import com.twitter.sdk.android.core.Result;
-import com.twitter.sdk.android.core.TwitterAuthConfig;
-import com.twitter.sdk.android.core.TwitterCore;
-import com.twitter.sdk.android.core.TwitterException;
-import com.twitter.sdk.android.core.TwitterSession;
-import com.twitter.sdk.android.core.identity.TwitterAuthClient;
-import com.twitter.sdk.android.core.models.User;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
-import io.fabric.sdk.android.Fabric;
-import retrofit2.Call;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final long ANIMATION_DURATION = 800;
 
+    private ImageView mLogoImage;
+    private ImageView mMobileCenterImage;
+    private ImageView mErrorImage;
+    private TextView mErrorTitle;
+    private TextView mErrorText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
         setContentView(R.layout.activity_login);
 
-        MobileCenter.start(getApplication(), "6a9dd562-124f-4632-84ee-dfd3361d2e67",
-                Analytics.class, Crashes.class);
-
-
-
-
+        mLogoImage = (ImageView)findViewById(R.id.login_logo);
+        mMobileCenterImage = (ImageView)findViewById(R.id.login_mobile_center);
+        mErrorImage = (ImageView)findViewById(R.id.login_error_image);
+        mErrorTitle = (TextView)findViewById(R.id.login_error_title);
+        mErrorText = (TextView)findViewById(R.id.login_error_text);
     }
 
     public void onLoginFacebookClick(View view) {
-        Map<String, String> properties = new HashMap<String, String>() {{
-            put("Page", "Login");
-            put("Category", "Clicks");
-        }};
-        Analytics.trackEvent("Facebook login button clicked", properties);
+        // track click event
+        ((MyApplication)getApplication()).getAnalyticsService().trackLoginFacebookClick();
 
+        // hide error in case if it was shown
+        hideError();
+
+        // authorize using Facebook service
         SocialService facebookService = ((MyApplication)getApplication()).getFacebookService();
         facebookService.logIn(this, new SocialService.LogInCallback() {
             @Override
-            public void onSuccess(com.akvelon.mobilecenterandroiddemo.models.User user) {
-
-            }
-
-            @Override
-            public void onFailure(Error error) {
-
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-        });
-    }
-
-    public void onLoginTwitterClick(View view) {
-        Map<String, String> properties = new HashMap<String, String>() {{
-            put("Page", "Login");
-            put("Category", "Clicks");
-        }};
-        Analytics.trackEvent("Facebook login button clicked", properties);
-
-        SocialService twitterService = ((MyApplication)getApplication()).getTwitterService();
-        twitterService.logIn(this, new SocialService.LogInCallback() {
-            @Override
-            public void onSuccess(com.akvelon.mobilecenterandroiddemo.models.User user) {
+            public void onSuccess(User user) {
                 showMainActivity(user);
             }
 
             @Override
             public void onFailure(Error error) {
+                showError();
+            }
+        });
+    }
 
+    public void onLoginTwitterClick(View view) {
+        // track click event
+        ((MyApplication)getApplication()).getAnalyticsService().trackLoginTwitterClick();
+
+        // hide error in case if it was shown
+        hideError();
+
+        // authorize using Twitter service
+        SocialService twitterService = ((MyApplication)getApplication()).getTwitterService();
+        twitterService.logIn(this, new SocialService.LogInCallback() {
+            @Override
+            public void onSuccess(User user) {
+                showMainActivity(user);
             }
 
             @Override
-            public void onCancel() {
-
+            public void onFailure(Error error) {
+                showError();
             }
         });
     }
@@ -116,10 +82,28 @@ public class LoginActivity extends AppCompatActivity {
         ((MyApplication)getApplication()).getFacebookService().onActivityResult(requestCode, responseCode, intent);
     }
 
-    private void showMainActivity(com.akvelon.mobilecenterandroiddemo.models.User user) {
+    private void showMainActivity(User user) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
         startActivity(intent);
         this.finish();
+    }
+
+    private void showError() {
+        mErrorImage.animate().alpha(1).setDuration(ANIMATION_DURATION).start();
+        mErrorTitle.animate().alpha(1).setDuration(ANIMATION_DURATION).start();
+        mErrorText.animate().alpha(1).setDuration(ANIMATION_DURATION).start();
+
+        mLogoImage.animate().alpha(0).setDuration(ANIMATION_DURATION).start();
+        mMobileCenterImage.animate().alpha(0).setDuration(ANIMATION_DURATION).start();
+    }
+
+    private void hideError() {
+        mErrorImage.animate().alpha(0).setDuration(ANIMATION_DURATION).start();
+        mErrorTitle.animate().alpha(0).setDuration(ANIMATION_DURATION).start();
+        mErrorText.animate().alpha(0).setDuration(ANIMATION_DURATION).start();
+
+        mLogoImage.animate().alpha(1).setDuration(ANIMATION_DURATION).start();
+        mMobileCenterImage.animate().alpha(1).setDuration(ANIMATION_DURATION).start();
     }
 }

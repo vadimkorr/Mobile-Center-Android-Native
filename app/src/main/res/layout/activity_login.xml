@@ -23,8 +23,46 @@
         android:layout_height="match_parent">
 
 
+        <ImageView
+            android:id="@+id/login_error_image"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:alpha="0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.26"
+            app:srcCompat="@drawable/error_image" />
+
+        <TextView
+            android:id="@+id/login_error_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:alpha="0"
+            android:text="ERROR"
+            android:textSize="18sp"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_error_image" />
+
+        <TextView
+            android:id="@+id/login_error_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:alpha="0"
+            android:text="SORRY SOMETHING\nWENT WRONG"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_error_title" />
+
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/login_facebook_button"
             android:layout_width="250dp"
             android:layout_height="50dp"
             android:layout_marginBottom="16dp"
@@ -64,17 +102,17 @@
             app:layout_constraintRight_toRightOf="parent" />
 
         <ImageView
-            android:id="@+id/home_mobile_center"
+            android:id="@+id/login_mobile_center"
             android:layout_width="154dp"
             android:layout_height="33dp"
             android:layout_marginBottom="34dp"
-            app:layout_constraintBottom_toTopOf="@+id/imageView3"
+            app:layout_constraintBottom_toTopOf="@+id/login_logo"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:srcCompat="@drawable/login_mobile_center" />
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/login_logo"
             android:layout_width="240dp"
             android:layout_height="98dp"
             app:layout_constraintBottom_toBottomOf="parent"
