@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.akvelon.mobilecenterandroiddemo.models.User;
+import com.akvelon.mobilecenterandroiddemo.services.Analytics.AnalyticsService;
 import com.akvelon.mobilecenterandroiddemo.services.Social.SocialService;
 
 public class LoginActivity extends AppCompatActivity {
@@ -36,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         // track click event
         ((MyApplication)getApplication()).getAnalyticsService().trackLoginFacebookClick();
 
-        // hide error in case if it was shown
+        // hide error in case if it was shown before
         hideError();
 
         // authorize using Facebook service
@@ -44,11 +45,26 @@ public class LoginActivity extends AppCompatActivity {
         facebookService.logIn(this, new SocialService.LogInCallback() {
             @Override
             public void onSuccess(User user) {
+                // track social sign in success event
+                ((MyApplication)getApplicationContext()).getAnalyticsService().trackSocialSignInResult(
+                        AnalyticsService.SocialNetwork.FACEBOOK,
+                        true,
+                        null
+                );
+
+                // proceed to main screen
                 showMainActivity(user);
             }
 
             @Override
             public void onFailure(Error error) {
+                // track social sign in error event
+                ((MyApplication)getApplicationContext()).getAnalyticsService().trackSocialSignInResult(
+                        AnalyticsService.SocialNetwork.FACEBOOK,
+                        false,
+                        error.getMessage()
+                );
+
                 showError();
             }
         });
@@ -66,11 +82,26 @@ public class LoginActivity extends AppCompatActivity {
         twitterService.logIn(this, new SocialService.LogInCallback() {
             @Override
             public void onSuccess(User user) {
+                // track social sign in success event
+                ((MyApplication)getApplicationContext()).getAnalyticsService().trackSocialSignInResult(
+                        AnalyticsService.SocialNetwork.TWITTER,
+                        true,
+                        null
+                );
+
+                // proceed to main screen
                 showMainActivity(user);
             }
 
             @Override
             public void onFailure(Error error) {
+                // track social sign in error event
+                ((MyApplication)getApplicationContext()).getAnalyticsService().trackSocialSignInResult(
+                        AnalyticsService.SocialNetwork.TWITTER,
+                        false,
+                        error.getMessage()
+                );
+
                 showError();
             }
         });

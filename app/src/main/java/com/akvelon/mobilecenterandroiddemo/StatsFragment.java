@@ -21,7 +21,6 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.microsoft.azure.mobile.analytics.Analytics;
 import com.microsoft.azure.mobile.crashes.Crashes;
 
 import java.util.ArrayList;
@@ -82,7 +81,7 @@ public class StatsFragment extends Fragment implements View.OnClickListener, Rad
 
         mChart = (LineChart) view.findViewById(R.id.statistics_chart);
         initChart();
-        updateChartValues();
+        updateChartData();
 
         return view;
     }
@@ -135,7 +134,9 @@ public class StatsFragment extends Fragment implements View.OnClickListener, Rad
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.stats_crash_button:
-                Analytics.trackEvent("Crash button clicked");
+                // track crash click event
+                ((MyApplication)mContext.getApplicationContext()).getAnalyticsService().trackCrashClick();
+                // do manual crash
                 Crashes.generateTestCrash();
                 break;
         }
@@ -157,15 +158,15 @@ public class StatsFragment extends Fragment implements View.OnClickListener, Rad
                 mSelectedFitnessType = FitnessDataType.ACTIVE_TIME;
                 break;
         }
-        updateChartValues();
+        updateChartData();
     }
 
-    private void updateChartValues() {
+    private void updateChartData() {
         if (mFitnessDataList == null || mFitnessDataList.size() == 0) {
             return;
         }
 
-        // first timestamp in our data set
+        // first timestamp in our data set, other timestamps will be relative to this
         long referenceTimestamp = mFitnessDataList.get(0).getDate().getTime();
         List<Entry> values = getEntryValues(mFitnessDataList, mSelectedFitnessType, referenceTimestamp);
 
@@ -174,8 +175,10 @@ public class StatsFragment extends Fragment implements View.OnClickListener, Rad
         // create a data object with the data set
         LineData data = lineData(dataSet);
 
+        // configure x axis to show dates
         configureXAxisFormatter(referenceTimestamp);
 
+        // do not show negative values
         mChart.getAxisLeft().setAxisMinimum(0f);
 
         // set data
@@ -249,9 +252,18 @@ public class StatsFragment extends Fragment implements View.OnClickListener, Rad
 
         @Override
         protected void updateUI(List<FitnessData> dataList) {
+            // if dataList is not null, then result is success
+            boolean success = dataList != null;
+
+            // track Google Fit retrieve result event
+            ((MyApplication)mContext.getApplicationContext()).getAnalyticsService().trackGoogleFitRetrieveResult(
+                    success,
+                    null
+            );
+
             if (dataList != null && dataList.size() > 0) {
                 mFitnessDataList = dataList;
-                updateChartValues();
+                updateChartData();
 
                 // update last update date to ensure outdating
                 mFitnessLastUpdatedDate = new Date();

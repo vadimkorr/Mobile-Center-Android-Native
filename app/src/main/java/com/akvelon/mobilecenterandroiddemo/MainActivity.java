@@ -30,32 +30,41 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // user data to show user name and photo
         mUser = getIntent().getExtras().getParcelable(ARG_USER);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.main_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        initFitnessClient();
+        // initiate Google Fit sign in process
+        initFitnessSignInProcess();
 
+        // show home fragment
         showFragment(getHomeFragment());
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-    }
-
-    private void initFitnessClient() {
+    private void initFitnessSignInProcess() {
         FitnessService fitnessService = ((MyApplication)getApplication()).getFitnessService();
         fitnessService.initFitnessClient(this, new FitnessService.FitnessServiceInitCallback() {
             @Override
             public void onSuccess() {
-                // do nothing, fragment will start fetching fitness data automatically
+                // track Google Fit connection success event
+                ((MyApplication)getApplicationContext()).getAnalyticsService().trackGoogleFitConnectResult(
+                        true,
+                        null
+                );
+
+                // do nothing, a fragment will start fetching fitness data automatically
             }
 
             @Override
             public void onFail(ConnectionResult result) {
+                // track Google Fit connection failure event
+                ((MyApplication)getApplicationContext()).getAnalyticsService().trackGoogleFitConnectResult(
+                        false,
+                        result.getErrorMessage()
+                );
+
                 showFailDialog();
             }
         });
@@ -83,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_stats:
                     fragment = getStatsFragment();
+                    // track statistics click event
+                    ((MyApplication)getApplication()).getAnalyticsService().trackStatisticsClick();
                     break;
                 default:
                     fragment = getHomeFragment();

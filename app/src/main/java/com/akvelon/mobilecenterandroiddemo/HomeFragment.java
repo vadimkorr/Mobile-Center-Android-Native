@@ -184,6 +184,15 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected void updateUI(List<FitnessData> dataList) {
+            // if dataList is not null, then result is success
+            boolean success = dataList != null;
+
+            // track Google Fit retrieve result event
+            ((MyApplication)mContext.getApplicationContext()).getAnalyticsService().trackGoogleFitRetrieveResult(
+                    success,
+                    null
+            );
+
             if (dataList != null && dataList.size() > 0) {
                 mFitnessData = dataList.get(0);
                 updateFitnessValues();
