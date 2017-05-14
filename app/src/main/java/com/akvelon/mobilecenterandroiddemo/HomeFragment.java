@@ -184,7 +184,7 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected void updateUI(List<FitnessData> dataList) {
-            if (dataList.size() > 0) {
+            if (dataList != null && dataList.size() > 0) {
                 mFitnessData = dataList.get(0);
                 updateFitnessValues();
 

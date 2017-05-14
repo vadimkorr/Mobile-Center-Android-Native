@@ -19,6 +19,13 @@ public interface FitnessService {
 
     void initFitnessClient(FragmentActivity activity, FitnessServiceInitCallback callback);
 
+    /**
+     * Fetches fitness data for requested period.
+     *
+     * @param startTime start of period
+     * @param endTime end of period
+     * @return list of fitness data or null if service is not connected
+     */
     List<FitnessData> fetchData(Date startTime, Date endTime);
 
 }

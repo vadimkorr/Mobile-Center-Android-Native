@@ -1,10 +1,13 @@
 package com.akvelon.mobilecenterandroiddemo.services.Fitness;
 
+import android.content.IntentSender;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -33,8 +36,9 @@ import static com.google.android.gms.fitness.FitnessActivities.STILL;
 
 public class GoogleFitService implements FitnessService {
 
-    public static final String TAG = "StepCounter";
+    public static final String TAG = "GoogleFitService";
     private GoogleApiClient mClient = null;
+    private boolean mResolvingError;
 
     /**
      * Build a {@link GoogleApiClient} to authenticate the user and allow the application
@@ -44,12 +48,16 @@ public class GoogleFitService implements FitnessService {
      * to resolve authentication failures (for example, the user has not signed in
      * before, or has multiple accounts and must specify which account to use).
      */
-    public void initFitnessClient(FragmentActivity activity, final FitnessServiceInitCallback callback) {
+    public void initFitnessClient(final FragmentActivity activity, final FitnessServiceInitCallback callback) {
+        // resetting error resolving flag
+        mResolvingError = false;
+
         // Create the Google API Client
         mClient = new GoogleApiClient.Builder(activity.getApplicationContext())
                 .addApi(Fitness.RECORDING_API)
                 .addApi(Fitness.HISTORY_API)
                 .addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ))
+                .addScope(new Scope(Scopes.FITNESS_LOCATION_READ))
                 .addConnectionCallbacks(
                         new GoogleApiClient.ConnectionCallbacks() {
 
@@ -80,10 +88,24 @@ public class GoogleFitService implements FitnessService {
                 .enableAutoManage(activity, 0, new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
                     public void onConnectionFailed(ConnectionResult result) {
-                        Log.w(TAG, "Google Play services connection failed. Cause: " +
-                                result.toString());
-                        if (callback != null) {
-                            callback.onFail(result);
+                        Log.w(TAG, "Google Play services connection failed. Cause: " + result.toString());
+
+                        if (!result.hasResolution()) {
+                            if (callback != null) {
+                                callback.onFail(result);
+                            }
+                            return;
+                        }
+
+                        if (!mResolvingError) {
+                            try {
+                                mResolvingError = true;
+                                result.startResolutionForResult(activity, ConnectionResult.CANCELED);
+                            } catch (IntentSender.SendIntentException e) {
+                                if (callback != null) {
+                                    callback.onFail(result);
+                                }
+                            }
                         }
                     }
                 })
@@ -114,6 +136,10 @@ public class GoogleFitService implements FitnessService {
     }
 
     public List<FitnessData> fetchData(Date startTime, Date endTime) {
+
+        if (!mClient.isConnected() && !mClient.isConnecting()) {
+            return null;
+        }
 
         List<FitnessData> resultList = new ArrayList<FitnessData>();
 
@@ -149,6 +175,7 @@ public class GoogleFitService implements FitnessService {
                             distance = dp.getValue(Field.FIELD_DISTANCE).asFloat();
                         } else if (dp.getDataType().equals(DataType.AGGREGATE_ACTIVITY_SUMMARY)) {
                             String activity = dp.getValue(Field.FIELD_ACTIVITY).asActivity();
+                            // calculating sum of activities durations except "still"
                             if (!activity.equals(STILL)) {
                                activityTime += dp.getValue(Field.FIELD_DURATION).asInt();
                             }

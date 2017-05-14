@@ -1,12 +1,14 @@
 package com.akvelon.mobilecenterandroiddemo;
 
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
@@ -30,21 +32,10 @@ public class MainActivity extends AppCompatActivity {
 
         mUser = getIntent().getExtras().getParcelable(ARG_USER);
 
-        FitnessService fitnessService = ((MyApplication)getApplication()).getFitnessService();
-        fitnessService.initFitnessClient(this, new FitnessService.FitnessServiceInitCallback() {
-            @Override
-            public void onSuccess() {
-
-            }
-
-            @Override
-            public void onFail(ConnectionResult result) {
-
-            }
-        });
-
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.main_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        initFitnessClient();
 
         showFragment(getHomeFragment());
     }
@@ -53,6 +44,34 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+    }
+
+    private void initFitnessClient() {
+        FitnessService fitnessService = ((MyApplication)getApplication()).getFitnessService();
+        fitnessService.initFitnessClient(this, new FitnessService.FitnessServiceInitCallback() {
+            @Override
+            public void onSuccess() {
+                // do nothing, fragment will start fetching fitness data automatically
+            }
+
+            @Override
+            public void onFail(ConnectionResult result) {
+                showFailDialog();
+            }
+        });
+    }
+
+    private void showFailDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Failed to connect to Google Fit Services. Unable to continue.")
+                .setCancelable(false)
+                .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener

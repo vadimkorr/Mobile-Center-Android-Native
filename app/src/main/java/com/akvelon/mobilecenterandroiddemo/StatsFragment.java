@@ -176,6 +176,8 @@ public class StatsFragment extends Fragment implements View.OnClickListener, Rad
 
         configureXAxisFormatter(referenceTimestamp);
 
+        mChart.getAxisLeft().setAxisMinimum(0f);
+
         // set data
         mChart.setData(data);
         mChart.invalidate();
@@ -247,7 +249,7 @@ public class StatsFragment extends Fragment implements View.OnClickListener, Rad
 
         @Override
         protected void updateUI(List<FitnessData> dataList) {
-            if (dataList.size() > 0) {
+            if (dataList != null && dataList.size() > 0) {
                 mFitnessDataList = dataList;
                 updateChartValues();
 
