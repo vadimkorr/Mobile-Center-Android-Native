@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                         false,
                         result.getErrorMessage()
                 );
-
+                //http://stackoverflow.com/questions/41019909/reopen-sign-in-dialog-to-connect-with-google-fit
                 showFailDialog();
             }
         });
