@@ -65,7 +65,7 @@ public class MCAnalyticsService implements AnalyticsService {
             put("Result", String.valueOf(success));
             put("Error message", errorMessage);
         }};
-        Analytics.trackEvent("Trying to retrieve data from HealthKit/Google Fit API", properties);
+        Analytics.trackEvent("Trying to connect to Google Fit API", properties);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class MCAnalyticsService implements AnalyticsService {
             put("Result", String.valueOf(success));
             put("Error message", errorMessage);
         }};
-        Analytics.trackEvent("Trying to login in Facebook/Twitter", properties);
+        Analytics.trackEvent("Trying to retrieve data from Google Fit API", properties);
     }
 
     @Override
