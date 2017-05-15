@@ -167,6 +167,7 @@ public class StatsFragment extends Fragment implements View.OnClickListener, Rad
         }
 
         // first timestamp in our data set, other timestamps will be relative to this
+        // see https://github.com/PhilJay/MPAndroidChart/issues/789#issuecomment-241507904
         long referenceTimestamp = mFitnessDataList.get(0).getDate().getTime();
         List<Entry> values = getEntryValues(mFitnessDataList, mSelectedFitnessType, referenceTimestamp);
 
@@ -176,6 +177,7 @@ public class StatsFragment extends Fragment implements View.OnClickListener, Rad
         LineData data = lineData(dataSet);
 
         // configure x axis to show dates
+        // see https://github.com/PhilJay/MPAndroidChart/issues/789#issuecomment-241507904
         configureXAxisFormatter(referenceTimestamp);
 
         // do not show negative values
