@@ -1,20 +1,14 @@
 package com.akvelon.mobilecenterandroiddemo;
 
-
-import android.Manifest;
 import android.content.DialogInterface;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.akvelon.mobilecenterandroiddemo.models.User;
@@ -24,7 +18,6 @@ import com.google.android.gms.common.ConnectionResult;
 public class MainActivity extends AppCompatActivity {
 
     public static final String ARG_USER = "user";
-    public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
     private Fragment mHomeFragment;
     private Fragment mStatsFragment;
@@ -42,36 +35,11 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.main_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        boolean isPermissionGranted = ContextCompat.checkSelfPermission(MainActivity.this,
-                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        // initiate Google Fit sign in process
+        initFitnessSignInProcess();
 
-        if (!isPermissionGranted) {
-            ActivityCompat.requestPermissions(MainActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-        }
-        else {
-            Log.i("PERMISSIONS","Permissions were already granted");
-            // initiate Google Fit sign in process
-            initFitnessSignInProcess();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.i("PERMISSIONS","Permissions were granted");
-                    // initiate Google Fit sign in process
-                    initFitnessSignInProcess();
-                } else {
-                    Log.i("PERMISSIONS","Permissions were denied");
-                }
-                return;
-            }
-        }
+        // show home fragment
+        showFragment(getHomeFragment());
     }
 
     private void initFitnessSignInProcess() {
@@ -84,8 +52,6 @@ public class MainActivity extends AppCompatActivity {
                         true,
                         null
                 );
-                // show home fragment
-                showFragment(getHomeFragment());
                 // do nothing, a fragment will start fetching fitness data automatically
             }
 
@@ -98,8 +64,6 @@ public class MainActivity extends AppCompatActivity {
                 );
                 //http://stackoverflow.com/questions/41019909/reopen-sign-in-dialog-to-connect-with-google-fit
                 showFailDialog();
-                // show home fragment
-                showFragment(getHomeFragment());
             }
         });
     }

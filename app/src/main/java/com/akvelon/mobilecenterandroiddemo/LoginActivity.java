@@ -1,8 +1,13 @@
 package com.akvelon.mobilecenterandroiddemo;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,12 +19,14 @@ import com.akvelon.mobilecenterandroiddemo.services.Social.SocialService;
 public class LoginActivity extends AppCompatActivity {
 
     private static final long ANIMATION_DURATION = 800;
+    public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
     private ImageView mLogoImage;
     private ImageView mMobileCenterImage;
     private ImageView mErrorImage;
     private TextView mErrorTitle;
     private TextView mErrorText;
+    private User mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +38,39 @@ public class LoginActivity extends AppCompatActivity {
         mErrorImage = (ImageView)findViewById(R.id.login_error_image);
         mErrorTitle = (TextView)findViewById(R.id.login_error_title);
         mErrorText = (TextView)findViewById(R.id.login_error_text);
+    }
+
+    public void getLocationPermission() {
+        boolean isPermissionGranted = ContextCompat.checkSelfPermission(LoginActivity.this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+
+        if (!isPermissionGranted) {
+            ActivityCompat.requestPermissions(LoginActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
+        else {
+            Log.i("PERMISSIONS","Permissions were already granted");
+            showMainActivity(mUser);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.i("PERMISSIONS","Permissions were granted");
+                    // proceed to main screen
+                    showMainActivity(mUser);
+                } else {
+                    showError();
+                    Log.i("PERMISSIONS","Permissions were denied");
+                }
+                return;
+            }
+        }
     }
 
     public void onLoginFacebookClick(View view) {
@@ -51,9 +91,8 @@ public class LoginActivity extends AppCompatActivity {
                         true,
                         null
                 );
-
-                // proceed to main screen
-                showMainActivity(user);
+                mUser = user;
+                getLocationPermission();
             }
 
             @Override
@@ -88,9 +127,8 @@ public class LoginActivity extends AppCompatActivity {
                         true,
                         null
                 );
-
-                // proceed to main screen
-                showMainActivity(user);
+                mUser = user;
+                getLocationPermission();
             }
 
             @Override
