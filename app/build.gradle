@@ -26,6 +26,19 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig getSigningConfig()
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def project = "MobileCenterAndroidNative";
+                    def date = new Date();
+                    def formattedDate = date.format('dd-MM-yy--HH-mm-ss');
+                    def s = "_";
+                    def apkName = project + s + formattedDate + ".apk";
+                    output.outputFile = new File(output.outputFile.parent, apkName)
+                            //for Debug use output.outputFile = new File(output.outputFile.parent,
+                            //                             output.outputFile.name.replace("-debug", "-" + formattedDate)
+                }
+            }
         }
     }
 }
