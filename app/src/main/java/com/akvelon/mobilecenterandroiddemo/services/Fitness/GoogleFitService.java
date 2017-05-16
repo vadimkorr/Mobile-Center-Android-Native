@@ -18,6 +18,7 @@ import com.google.android.gms.fitness.Fitness;
 import com.google.android.gms.fitness.data.Bucket;
 import com.google.android.gms.fitness.data.DataPoint;
 import com.google.android.gms.fitness.data.DataSet;
+import com.google.android.gms.fitness.data.DataSource;
 import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.fitness.data.Field;
 import com.google.android.gms.fitness.request.DataReadRequest;
@@ -135,6 +136,24 @@ public class GoogleFitService implements FitnessService {
         }
     }
 
+    private DataReadRequest getDataRequest(Date startTime, Date endTime) {
+        DataSource ESTIMATED_STEP_DELTAS = new DataSource.Builder()
+                .setDataType(DataType.TYPE_STEP_COUNT_DELTA)
+                .setType(DataSource.TYPE_DERIVED)
+                .setStreamName("estimated_steps")
+                .setAppPackageName("com.google.android.gms")
+                .build();
+        DataReadRequest readRequest = new DataReadRequest.Builder()
+                .aggregate(ESTIMATED_STEP_DELTAS /*DataType.TYPE_STEP_COUNT_DELTA*/, DataType.AGGREGATE_STEP_COUNT_DELTA)
+                .aggregate(DataType.TYPE_CALORIES_EXPENDED, DataType.AGGREGATE_CALORIES_EXPENDED)
+                .aggregate(DataType.TYPE_DISTANCE_DELTA, DataType.AGGREGATE_DISTANCE_DELTA)
+                .aggregate(DataType.TYPE_ACTIVITY_SEGMENT, DataType.AGGREGATE_ACTIVITY_SUMMARY)
+                .setTimeRange(startTime.getTime(), endTime.getTime(), TimeUnit.MILLISECONDS)
+                .bucketByTime(1, TimeUnit.DAYS)
+                .build();
+        return readRequest;
+    }
+
     public List<FitnessData> fetchData(Date startTime, Date endTime) {
 
         if (!mClient.isConnected() && !mClient.isConnecting()) {
@@ -145,14 +164,7 @@ public class GoogleFitService implements FitnessService {
 
         PendingResult<DataReadResult> pendingResult = Fitness.HistoryApi.readData(
                 mClient,
-                new DataReadRequest.Builder()
-                        .aggregate(DataType.TYPE_STEP_COUNT_DELTA, DataType.AGGREGATE_STEP_COUNT_DELTA)
-                        .aggregate(DataType.TYPE_CALORIES_EXPENDED, DataType.AGGREGATE_CALORIES_EXPENDED)
-                        .aggregate(DataType.TYPE_DISTANCE_DELTA, DataType.AGGREGATE_DISTANCE_DELTA)
-                        .aggregate(DataType.TYPE_ACTIVITY_SEGMENT, DataType.AGGREGATE_ACTIVITY_SUMMARY)
-                        .setTimeRange(startTime.getTime(), endTime.getTime(), TimeUnit.MILLISECONDS)
-                        .bucketByTime(1, TimeUnit.DAYS)
-                        .build());
+                getDataRequest(startTime, endTime));
 
         DataReadResult readDataResult = pendingResult.await(30, TimeUnit.SECONDS);
         if (readDataResult.getBuckets().size() > 0) {
