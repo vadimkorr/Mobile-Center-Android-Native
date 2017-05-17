@@ -138,6 +138,12 @@ public class StatsFragment extends Fragment implements View.OnClickListener, Rad
                 ((MyApplication)mContext.getApplicationContext()).getAnalyticsService().trackCrashClick();
                 // do manual crash
                 Crashes.generateTestCrash();
+
+                //generate crash on release build
+                if (!BuildConfig.DEBUG) {
+                    throw new RuntimeException("This is a test app crash");
+                }
+
                 break;
         }
     }
