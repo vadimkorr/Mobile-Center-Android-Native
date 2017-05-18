@@ -1,11 +1,13 @@
 package com.akvelon.mobilecenterandroiddemo;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -137,13 +139,22 @@ public class StatsFragment extends Fragment implements View.OnClickListener, Rad
                 // track crash click event
                 ((MyApplication)mContext.getApplicationContext()).getAnalyticsService().trackCrashClick();
                 // do manual crash
+                //https://docs.microsoft.com/en-us/mobile-center/sdk/crashes/android
                 Crashes.generateTestCrash();
 
-                //generate crash on release build
-                if (!BuildConfig.DEBUG) {
-                    throw new RuntimeException("This is a test app crash");
-                }
-
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Crash was generated")
+                        .setMessage("Crashes API can only be used in debug builds and won't do anything in release builds.")
+                        .setIcon(R.mipmap.ic_launcher)
+                        .setCancelable(false)
+                        .setNegativeButton("OK",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+                AlertDialog alert = builder.create();
+                alert.show();
                 break;
         }
     }
