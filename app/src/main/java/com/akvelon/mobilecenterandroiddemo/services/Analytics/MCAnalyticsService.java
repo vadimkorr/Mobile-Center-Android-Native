@@ -19,7 +19,7 @@ public class MCAnalyticsService implements AnalyticsService {
     public MCAnalyticsService(Context context) {
         MobileCenter.start(
                 (Application) context.getApplicationContext(),
-                "6a9dd562-124f-4632-84ee-dfd3361d2e67",
+                "bc6b00f9-18ec-4fbf-95fc-0477ddf7edfb",
                 Analytics.class,
                 Crashes.class
         );
