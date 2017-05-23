@@ -11,23 +11,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="-70dp"
+        android:contentDescription="Logo of the application on the background"
         android:scaleType="centerCrop"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/login_background" />
 
-
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
 
         <ImageView
             android:id="@+id/login_error_image"
             android:layout_width="110dp"
             android:layout_height="110dp"
             android:alpha="0"
+            android:contentDescription="Error icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:alpha="0"
-            android:text="ERROR"
+            android:text="@string/error_title"
             android:textSize="18sp"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:alpha="0"
-            android:text="SORRY SOMETHING\nWENT WRONG"
+            android:text="@string/error_description"
             android:textAlignment="center"
             android:textSize="18sp"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -66,15 +66,13 @@
             android:layout_width="250dp"
             android:layout_height="50dp"
             android:layout_marginBottom="16dp"
-
             android:background="@drawable/button_facebook"
             android:drawableLeft="@drawable/login_facebook"
-
             android:drawablePadding="15sp"
-            android:gravity="left|center_vertical"
+            android:gravity="center_vertical"
             android:onClick="onLoginFacebookClick"
             android:paddingLeft="32sp"
-            android:text="LOGIN VIA FACEBOOK"
+            android:text="@string/login_facebook_btn_caption"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@+id/login_twitter_button"
@@ -86,15 +84,13 @@
             android:layout_width="250dp"
             android:layout_height="50dp"
             android:layout_marginBottom="62dp"
-
             android:background="@drawable/button_twitter"
             android:drawableLeft="@drawable/login_twitter"
-
             android:drawablePadding="10sp"
-            android:gravity="left|center_vertical"
+            android:gravity="center_vertical"
             android:onClick="onLoginTwitterClick"
             android:paddingLeft="28sp"
-            android:text="LOGIN VIA TWITTER"
+            android:text="@string/login_twitter_btn_caption"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -106,6 +102,7 @@
             android:layout_width="154dp"
             android:layout_height="33dp"
             android:layout_marginBottom="34dp"
+            android:contentDescription="Logo of the Visual Studio Mobile Center on the top of the screen"
             app:layout_constraintBottom_toTopOf="@+id/login_logo"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -115,6 +112,7 @@
             android:id="@+id/login_logo"
             android:layout_width="240dp"
             android:layout_height="98dp"
+            android:contentDescription="The logo of the application"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

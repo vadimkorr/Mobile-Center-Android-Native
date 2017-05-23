@@ -1,7 +1,6 @@
 package com.akvelon.mobilecenterandroiddemo.services.Social;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -78,11 +77,10 @@ public class FacebookService implements SocialService, FacebookCallback<LoginRes
                         }
 
                         try {
-
                             String userID = (String) object.get("id");
                             String userName = (String) object.get("name");
                             String accessToken = loginResult.getAccessToken().getToken();
-                            String imageUrl = "https://graph.facebook.com/" + userID+ "/picture?type=large";
+                            String imageUrl = "https://graph.facebook.com/" + userID + "/picture?type=large";
 
                             com.akvelon.mobilecenterandroiddemo.models.User user;
                             user = new com.akvelon.mobilecenterandroiddemo.models.User(

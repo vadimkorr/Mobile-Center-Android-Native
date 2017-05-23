@@ -1,7 +1,6 @@
 package com.akvelon.mobilecenterandroiddemo.services.Social;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 
 import com.akvelon.mobilecenterandroiddemo.models.User;

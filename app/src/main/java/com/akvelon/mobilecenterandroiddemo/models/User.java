@@ -1,6 +1,5 @@
 package com.akvelon.mobilecenterandroiddemo.models;
 
-import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -27,7 +26,7 @@ public class User implements Parcelable {
         mSocialNetwork = socialNetwork;
     }
 
-    public User(Parcel source) {
+    private User(Parcel source) {
         mFullName = source.readString();
         mAccessToken = source.readString();
         mImageUrlString = source.readString();

@@ -48,14 +48,14 @@ public abstract class FitnessAsyncTask extends AsyncTask<String, String, List<Fi
 
     protected abstract Date endDate();
 
-    protected void showProgressDialog() {
+    private void showProgressDialog() {
         mProgDailog = new ProgressDialog(mContext);
         mProgDailog.setMessage(mContext.getString(R.string.progress_dialog_loading));
         mProgDailog.setCancelable(true);
         mProgDailog.show();
     }
 
-    protected void hideProgressDialog() {
+    private void hideProgressDialog() {
         mProgDailog.dismiss();
     }
 }

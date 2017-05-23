@@ -19,7 +19,7 @@ import com.akvelon.mobilecenterandroiddemo.services.Social.SocialService;
 public class LoginActivity extends AppCompatActivity {
 
     private static final long ANIMATION_DURATION = 800;
-    public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
     private ImageView mLogoImage;
     private ImageView mMobileCenterImage;
@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         mErrorText = (TextView)findViewById(R.id.login_error_text);
     }
 
-    public void getLocationPermission() {
+    private void getLocationPermission() {
         boolean isPermissionGranted = ContextCompat.checkSelfPermission(LoginActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
 
@@ -68,7 +68,6 @@ public class LoginActivity extends AppCompatActivity {
                     showError();
                     Log.i("PERMISSIONS","Permissions were denied");
                 }
-                return;
             }
         }
     }

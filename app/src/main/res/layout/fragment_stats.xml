@@ -55,7 +55,7 @@
             android:gravity="bottom"
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
-            android:text="Steps"
+            android:text="@string/stats_steps_caption"
             android:textAlignment="center" />
 
         <RadioButton
@@ -69,7 +69,7 @@
             android:gravity="bottom"
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
-            android:text="Calories"
+            android:text="@string/stats_calories_caption"
             android:textAlignment="center" />
 
         <RadioButton
@@ -83,7 +83,7 @@
             android:gravity="bottom"
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
-            android:text="Distance"
+            android:text="@string/stats_distance_caption"
             android:textAlignment="center" />
 
         <RadioButton
@@ -97,7 +97,7 @@
             android:gravity="bottom"
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
-            android:text="Active time"
+            android:text="@string/stats_active_time_caption"
             android:textAlignment="center" />
     </RadioGroup>
 
@@ -106,7 +106,7 @@
         android:layout_width="250dp"
         android:layout_height="50dp"
         android:background="@drawable/button_crash"
-        android:text="CRASH APPLICATION"
+        android:text="@string/crash_app_btn_caption"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
         app:layout_constraintLeft_toLeftOf="parent"

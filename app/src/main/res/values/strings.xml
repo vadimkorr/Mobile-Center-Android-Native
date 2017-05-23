@@ -5,10 +5,34 @@
     <string name="title_home">HOME</string>
     <string name="title_stats">STATISTICS</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="home_calories">CALORIES</string>
-    <string name="home_distance">DISTANCE</string>
-    <string name="active_time">ACTIVE TIME</string>
+    <!-- LOGIN SCREEN -->
+    <string name="error_title">ERROR</string>
+    <string name="error_description">SORRY SOMETHING\nWENT WRONG</string>
+    <string name="login_facebook_btn_caption">LOGIN VIA FACEBOOK</string>
+    <string name="login_twitter_btn_caption">LOGIN VIA TWITTER</string>
+
+    <!-- HOME SCREEN -->
+    <string name="home_calories_caption">CALORIES</string>
+    <string name="home_distance_caption">DISTANCE</string>
+    <string name="home_active_time_caption">ACTIVE TIME</string>
+    <string name="user_greeting_text">Hi, RICK WALLACE</string>
+    <string name="today_steps_init_caption">TODAY\'S STEPS</string>
+    <string name="today_steps_count_init_caption">10000</string>
+    <string name="today_calories_count_init_caption">500</string>
+    <string name="today_distance_count_init_caption">7.4</string>
+    <string name="today_active_time_hours_count_init_caption">0</string>
+    <string name="today_active_time_minutes_count_init_caption">0</string>
+    <string name="km_caption">Km</string>
+    <string name="hours_caption">h</string>
+    <string name="minutes_caption">m</string>
+
+    <!-- STATS SCREEN -->
+    <string name="daily_stats_caption">DAILY STATISTICS</string>
+    <string name="stats_steps_caption">Steps</string>
+    <string name="stats_calories_caption">Calories</string>
+    <string name="stats_distance_caption">Distance</string>
+    <string name="stats_active_time_caption">Active time</string>
+    <string name="crash_app_btn_caption">CRASH APPLICATION</string>
+
     <string name="progress_dialog_loading">Loading...</string>
 </resources>

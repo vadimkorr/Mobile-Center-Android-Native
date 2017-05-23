@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="-150dp"
+        android:contentDescription="Semi-circle background image on the top of the screen"
         android:scaleType="fitXY"
         app:srcCompat="@drawable/home_background" />
 
@@ -27,6 +28,7 @@
                 android:layout_width="154dp"
                 android:layout_height="33dp"
                 android:layout_marginTop="30dp"
+                android:contentDescription="The logo of the Visual Studio Mobile Center on the top of the screen"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -37,6 +39,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginTop="30dp"
+                android:contentDescription="Photo of the user"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -47,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="HI, RICK WALLACE"
+                android:text="@string/user_greeting_text"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -58,7 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                android:text="TODAY'S STEPS"
+                android:text="@string/today_steps_init_caption"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -69,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="17dp"
-                android:text="10000"
+                android:text="@string/today_steps_count_init_caption"
                 android:textColor="#01abee"
                 android:textSize="80sp"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -102,6 +105,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="35dp"
                         android:layout_marginTop="0dp"
+                        android:contentDescription="Calories icon"
                         app:srcCompat="@drawable/home_calories" />
 
                     <TextView
@@ -110,10 +114,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="40dp"
                         android:gravity="center_vertical"
-                        android:text="@string/home_calories"
+                        android:text="@string/home_calories_caption"
                         android:textAlignment="center"
                         android:textAllCaps="true"
-                        android:textSize="11sp" />
+                        android:textSize="12sp" />
 
                     <TextView
                         android:id="@+id/home_calories_value"
@@ -121,7 +125,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
                         android:gravity="top"
-                        android:text="500"
+                        android:text="@string/today_calories_count_init_caption"
                         android:textAlignment="center"
                         android:textAllCaps="true"
                         android:textColor="#fda601"
@@ -140,6 +144,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="35dp"
                         android:layout_marginTop="0dp"
+                        android:contentDescription="Distance icon"
                         app:srcCompat="@drawable/home_distance" />
 
                     <TextView
@@ -148,10 +153,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="40dp"
                         android:gravity="center_vertical"
-                        android:text="@string/home_distance"
+                        android:text="@string/home_distance_caption"
                         android:textAlignment="center"
                         android:textAllCaps="true"
-                        android:textSize="11sp" />
+                        android:textSize="12sp" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -163,7 +168,7 @@
                             android:id="@+id/home_distance_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="7.4"
+                            android:text="@string/today_distance_count_init_caption"
                             android:textAllCaps="true"
                             android:textColor="#8b05e4"
                             android:textSize="26sp" />
@@ -172,7 +177,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="3dp"
-                            android:text="Km"
+                            android:text="@string/km_caption"
                             android:textSize="12sp" />
 
                     </LinearLayout>
@@ -192,6 +197,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="35dp"
                         android:layout_marginTop="0dp"
+                        android:contentDescription="Active time icon"
                         app:srcCompat="@drawable/home_active_time" />
 
                     <TextView
@@ -200,10 +206,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="40dp"
                         android:gravity="center_vertical"
-                        android:text="@string/active_time"
+                        android:text="@string/home_active_time_caption"
                         android:textAlignment="center"
                         android:textAllCaps="true"
-                        android:textSize="11sp" />
+                        android:textSize="12sp" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -215,7 +221,7 @@
                             android:id="@+id/home_active_time_hour_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0"
+                            android:text="@string/today_active_time_hours_count_init_caption"
                             android:textAllCaps="true"
                             android:textColor="#49ae20"
                             android:textSize="26sp" />
@@ -223,7 +229,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="h"
+                            android:text="@string/hours_caption"
                             android:textSize="12sp" />
 
                         <TextView
@@ -231,7 +237,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="3dp"
-                            android:text="0"
+                            android:text="@string/today_active_time_minutes_count_init_caption"
                             android:textAllCaps="true"
                             android:textColor="#49ae20"
                             android:textSize="26sp" />
@@ -239,14 +245,11 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="m"
+                            android:text="@string/minutes_caption"
                             android:textSize="12sp" />
-
                     </LinearLayout>
                 </FrameLayout>
             </LinearLayout>
-
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
-
 </FrameLayout>

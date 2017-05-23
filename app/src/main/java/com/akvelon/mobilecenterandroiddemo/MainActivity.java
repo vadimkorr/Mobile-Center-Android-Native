@@ -114,14 +114,14 @@ public class MainActivity extends AppCompatActivity {
         mCurrentFragment = fragment;
     }
 
-    public Fragment getHomeFragment() {
+    private Fragment getHomeFragment() {
         if (mHomeFragment == null) {
             mHomeFragment = HomeFragment.newInstance(mUser);
         }
         return mHomeFragment;
     }
 
-    public Fragment getStatsFragment() {
+    private Fragment getStatsFragment() {
         if (mStatsFragment == null) {
             mStatsFragment = StatsFragment.newInstance();
         }

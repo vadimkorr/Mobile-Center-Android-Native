@@ -5,9 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -37,7 +35,7 @@ import static com.google.android.gms.fitness.FitnessActivities.STILL;
 
 public class GoogleFitService implements FitnessService {
 
-    public static final String TAG = "GoogleFitService";
+    private static final String TAG = "GoogleFitService";
     private GoogleApiClient mClient = null;
     private boolean mResolvingError;
 
@@ -160,7 +158,7 @@ public class GoogleFitService implements FitnessService {
             return null;
         }
 
-        List<FitnessData> resultList = new ArrayList<FitnessData>();
+        List<FitnessData> resultList = new ArrayList<>();
 
         PendingResult<DataReadResult> pendingResult = Fitness.HistoryApi.readData(
                 mClient,
@@ -189,7 +187,7 @@ public class GoogleFitService implements FitnessService {
                             String activity = dp.getValue(Field.FIELD_ACTIVITY).asActivity();
                             // calculating sum of activities durations except "still"
                             if (!activity.equals(STILL)) {
-                               activityTime += dp.getValue(Field.FIELD_DURATION).asInt();
+                                activityTime += dp.getValue(Field.FIELD_DURATION).asInt();
                             }
                         }
                     }

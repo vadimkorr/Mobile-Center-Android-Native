@@ -213,7 +213,7 @@ public class StatsFragment extends Fragment implements View.OnClickListener, Rad
     }
 
     private List<Entry> getEntryValues(List<FitnessData> fitnessDataList, FitnessDataType fitnessType, long referenceTimestamp, float widthScale, float widthValue) {
-        ArrayList<Entry> values = new ArrayList<Entry>();
+        ArrayList<Entry> values = new ArrayList<>();
         for (FitnessData fitnessData : fitnessDataList) {
             float x = ((float)(fitnessData.getDate().getTime() - referenceTimestamp) / widthValue) * widthScale;
             float y = (float)getAppropriateFitnessValue(fitnessData, fitnessType);

@@ -31,7 +31,7 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class HomeFragment extends Fragment {
-    public static final String ARG_USER = "user";
+    private static final String ARG_USER = "user";
 
     private User mUser;
     private Context mContext;

@@ -3,7 +3,6 @@ package com.akvelon.mobilecenterandroiddemo.services.Social;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
@@ -17,8 +16,6 @@ import com.twitter.sdk.android.core.models.User;
 
 import io.fabric.sdk.android.Fabric;
 import retrofit2.Call;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by ruslan on 5/13/17.
