@@ -129,6 +129,8 @@ public class StatsFragment extends Fragment implements View.OnClickListener, Rad
         mChart.getAxisRight().setEnabled(false);
 
         mChart.getXAxis().setDrawGridLines(false);
+        mChart.getAxisLeft().setDrawGridLines(true);
+
         mChart.setDrawBorders(false);
         mChart.getLegend().setEnabled(false);
     }

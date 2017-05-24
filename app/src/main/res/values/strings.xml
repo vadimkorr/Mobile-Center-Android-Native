@@ -25,6 +25,7 @@
     <string name="km_caption">Km</string>
     <string name="hours_caption">h</string>
     <string name="minutes_caption">m</string>
+    <string name="kcal_caption">Kcal</string>
 
     <!-- STATS SCREEN -->
     <string name="daily_stats_caption">DAILY STATISTICS</string>
