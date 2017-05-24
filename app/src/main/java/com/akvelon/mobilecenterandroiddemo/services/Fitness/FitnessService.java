@@ -7,9 +7,6 @@ import com.google.android.gms.common.ConnectionResult;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by ruslan on 5/11/17.
- */
 public interface FitnessService {
 
     interface FitnessServiceInitCallback {

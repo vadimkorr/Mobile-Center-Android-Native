@@ -19,10 +19,6 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
-/**
- * Created by ruslan on 5/13/17.
- */
-
 public class FacebookService implements SocialService, FacebookCallback<LoginResult> {
 
     private CallbackManager mFacebookCallbackManager;

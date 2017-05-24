@@ -3,10 +3,6 @@ package com.akvelon.mobilecenterandroiddemo.helpers;
 import java.util.Calendar;
 import java.util.Date;
 
-/**
- * Created by ruslan on 5/11/17.
- */
-
 public class DateHelper {
 
     public static Date today() {

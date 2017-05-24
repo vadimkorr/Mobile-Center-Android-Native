@@ -10,10 +10,6 @@ import com.akvelon.mobilecenterandroiddemo.services.Fitness.FitnessService;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by ruslan on 5/12/17.
- */
-
 public abstract class FitnessAsyncTask extends AsyncTask<String, String, List<FitnessData>> {
     Context mContext;
     private ProgressDialog mProgDailog;

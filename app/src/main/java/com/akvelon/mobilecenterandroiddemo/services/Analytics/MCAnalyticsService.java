@@ -10,10 +10,6 @@ import com.microsoft.azure.mobile.crashes.Crashes;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by ruslan on 5/13/17.
- */
-
 public class MCAnalyticsService implements AnalyticsService {
 
     public MCAnalyticsService(Context context) {

@@ -5,10 +5,6 @@ import android.content.Intent;
 
 import com.akvelon.mobilecenterandroiddemo.models.User;
 
-/**
- * Created by ruslan on 5/13/17.
- */
-
 public interface SocialService {
     interface LogInCallback {
         void onSuccess(User user);

@@ -10,7 +10,6 @@ import java.util.Locale;
 /**
  * Custom date formatter for X axis
  * See https://github.com/PhilJay/MPAndroidChart/issues/789#issuecomment-241507904
- * Created by ruslan on 5/12/17.
  */
 
 public class ChartDateAxisValueFormatter implements IAxisValueFormatter

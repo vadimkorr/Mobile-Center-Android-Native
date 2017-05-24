@@ -2,10 +2,6 @@ package com.akvelon.mobilecenterandroiddemo.services.Fitness;
 
 import java.util.Date;
 
-/**
- * Created by ruslan on 5/11/17.
- */
-
 public class FitnessData {
 
     private final int mSteps;

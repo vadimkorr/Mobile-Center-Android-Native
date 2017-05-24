@@ -10,10 +10,6 @@ import com.akvelon.mobilecenterandroiddemo.services.Social.FacebookService;
 import com.akvelon.mobilecenterandroiddemo.services.Social.SocialService;
 import com.akvelon.mobilecenterandroiddemo.services.Social.TwitterService;
 
-/**
- * Created by ruslan on 5/11/17.
- */
-
 public class ServicesFactory {
 
 

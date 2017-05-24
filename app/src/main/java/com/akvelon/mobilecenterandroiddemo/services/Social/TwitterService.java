@@ -17,10 +17,6 @@ import com.twitter.sdk.android.core.models.User;
 import io.fabric.sdk.android.Fabric;
 import retrofit2.Call;
 
-/**
- * Created by ruslan on 5/13/17.
- */
-
 public class TwitterService extends Callback<TwitterSession> implements SocialService {
 
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.

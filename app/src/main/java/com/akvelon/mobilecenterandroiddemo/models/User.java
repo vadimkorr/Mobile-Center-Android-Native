@@ -3,10 +3,6 @@ package com.akvelon.mobilecenterandroiddemo.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by ruslan on 5/12/17.
- */
-
 public class User implements Parcelable {
 
     public enum SocialNetwork {
