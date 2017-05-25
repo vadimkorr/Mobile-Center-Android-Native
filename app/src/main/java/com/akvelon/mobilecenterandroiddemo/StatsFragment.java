@@ -146,8 +146,7 @@ public class StatsFragment extends Fragment implements View.OnClickListener, Rad
                 Crashes.generateTestCrash();
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Crash was generated and sent to Mobile Center analytics service")
-                        .setMessage("Crashes API can only be used in debug builds and won't do anything in release builds.")
+                builder.setMessage("Crash was generated and sent to Mobile Center analytics service")
                         .setIcon(R.mipmap.ic_launcher)
                         .setCancelable(false)
                         .setNegativeButton("OK",

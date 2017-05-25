@@ -34,7 +34,7 @@
     <string name="stats_calories_caption">Calories</string>
     <string name="stats_distance_caption">Distance</string>
     <string name="stats_active_time_caption">Active time</string>
-    <string name="crash_app_btn_caption">CRASH APPLICATION</string>
+    <string name="crash_app_btn_caption">SEND CRASH EVENT</string>
 
     <string name="progress_dialog_loading">Loading...</string>
 </resources>
