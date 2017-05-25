@@ -27,6 +27,7 @@ public class FacebookService implements SocialService, FacebookCallback<LoginRes
     public FacebookService() {
         mFacebookCallbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().registerCallback(mFacebookCallbackManager, this);
+        LoginManager.getInstance().logOut();
     }
 
     @Override
